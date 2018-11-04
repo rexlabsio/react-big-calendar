@@ -3,13 +3,11 @@ import React from 'react'
 import EventRowMixin from './EventRowMixin'
 import { eventLevels } from './utils/eventLevels'
 import range from 'lodash/range'
-import { autobind } from 'core-decorators'
 
 let isSegmentInSlot = (seg, slot) => seg.left <= slot && seg.right >= slot
 let eventsInSlot = (segments, slot) =>
   segments.filter(seg => isSegmentInSlot(seg, slot)).length
 
-@autobind
 class EventEndingRow extends React.Component {
   static propTypes = {
     segments: PropTypes.array,
@@ -75,7 +73,7 @@ class EventEndingRow extends React.Component {
     return <div className="rbc-row">{row}</div>
   }
 
-  canRenderSlotEvent(slot, span) {
+  canRenderSlotEvent = (slot, span) => {
     let { segments } = this.props
 
     return range(slot, slot + span).every(s => {
@@ -85,7 +83,7 @@ class EventEndingRow extends React.Component {
     })
   }
 
-  renderShowMore(segments, slot) {
+  renderShowMore = (segments, slot) => {
     let { localizer } = this.props
     let count = eventsInSlot(segments, slot)
 
@@ -103,7 +101,7 @@ class EventEndingRow extends React.Component {
     )
   }
 
-  showMore(slot) {
+  showMore = (slot) => {
     const { onShowMore } = this.props
 
     return function(e) {

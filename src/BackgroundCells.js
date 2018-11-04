@@ -7,7 +7,6 @@ import dates from './utils/dates'
 import { notify } from './utils/helpers'
 import { dateCellSelection, getSlotAtX, pointInBox } from './utils/selection'
 import Selection, { getBoundsForNode, isEvent } from './Selection'
-import { autobind } from 'core-decorators'
 
 const daysOfWeek = [
   'Monday',
@@ -19,12 +18,11 @@ const daysOfWeek = [
   'Sunday',
 ]
 
-@autobind
 class BackgroundCells extends React.Component {
   static propTypes = {
     date: PropTypes.instanceOf(Date),
     getNow: PropTypes.func.isRequired,
-
+    workDays: PropTypes.arrayOf(PropTypes.string),
     i: PropTypes.object.isRequired,
     components: PropTypes.object.isRequired,
 
@@ -66,7 +64,7 @@ class BackgroundCells extends React.Component {
     }
   }
 
-  outOfWorkRange(date) {
+  outOfWorkRange = (date) => {
     const { workDays } = this.props
 
     if (!workDays) {
@@ -112,7 +110,7 @@ class BackgroundCells extends React.Component {
     )
   }
 
-  _selectable() {
+  _selectable = () => {
     let node = findDOMNode(this)
     let selector = (this._selector = new Selection(this.props.container, {
       longPressThreshold: this.props.longPressThreshold,
@@ -187,13 +185,13 @@ class BackgroundCells extends React.Component {
     })
   }
 
-  _teardownSelectable() {
+  _teardownSelectable = () => {
     if (!this._selector) return
     this._selector.teardown()
     this._selector = null
   }
 
-  _selectSlot({ endIdx, startIdx, action, bounds, box }) {
+  _selectSlot = ({ endIdx, startIdx, action, bounds, box }) => {
     if (endIdx !== -1 && startIdx !== -1) {
       this.props.onSelectSlot &&
         this.props.onSelectSlot({
