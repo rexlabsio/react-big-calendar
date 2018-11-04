@@ -141,10 +141,10 @@ class DateContentRow extends React.Component {
       selected,
       selectable,
       renderForMeasure,
-
       accessors,
       getters,
       components,
+      workDays,
 
       getNow,
       renderHeader,
@@ -181,6 +181,7 @@ class DateContentRow extends React.Component {
       <div className={className}>
         <BackgroundCells
           date={date}
+          workDays={workDays}
           getNow={getNow}
           rtl={rtl}
           range={range}

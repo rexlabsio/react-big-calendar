@@ -145,6 +145,7 @@ class MonthView extends React.Component {
       localizer,
       longPressThreshold,
       accessors,
+      workDays,
       getters,
     } = this.props
 
@@ -161,6 +162,7 @@ class MonthView extends React.Component {
         container={this.getContainer}
         className="rbc-month-row"
         getNow={getNow}
+        workDays={workDays}
         date={date}
         range={week}
         events={events}
@@ -290,7 +292,7 @@ class MonthView extends React.Component {
 
   handleShowMore = (events, date, cell, slot) => {
     const { popup, onDrillDown, onShowMore, getDrilldownView } = this.props
-    //cancel any pending selections so only the event click goes through.
+    // cancel any pending selections so only the event click goes through.
     this.clearSelection()
 
     if (popup) {
@@ -327,9 +329,9 @@ class MonthView extends React.Component {
   }
 }
 
-MonthView.range = (date, { localizer }) => {
-  let start = dates.firstVisibleDay(date, localizer)
-  let end = dates.lastVisibleDay(date, localizer)
+MonthView.range = (date, { culture }) => {
+  let start = dates.firstVisibleDay(date, culture)
+  let end = dates.lastVisibleDay(date, culture)
   return { start, end }
 }
 

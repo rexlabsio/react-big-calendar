@@ -7,13 +7,25 @@ import dates from './utils/dates'
 import { notify } from './utils/helpers'
 import { dateCellSelection, getSlotAtX, pointInBox } from './utils/selection'
 import Selection, { getBoundsForNode, isEvent } from './Selection'
+import { autobind } from 'core-decorators'
 
+const daysOfWeek = [
+  'Monday',
+  'Tuesday',
+  'Wednesday',
+  'Thursday',
+  'Friday',
+  'Saturday',
+  'Sunday',
+]
+
+@autobind
 class BackgroundCells extends React.Component {
   static propTypes = {
     date: PropTypes.instanceOf(Date),
     getNow: PropTypes.func.isRequired,
 
-    getters: PropTypes.object.isRequired,
+    i: PropTypes.object.isRequired,
     components: PropTypes.object.isRequired,
 
     container: PropTypes.func,
@@ -49,8 +61,20 @@ class BackgroundCells extends React.Component {
   componentWillReceiveProps(nextProps) {
     if (nextProps.selectable && !this.props.selectable) this._selectable()
 
-    if (!nextProps.selectable && this.props.selectable)
+    if (!nextProps.selectable && this.props.selectable) {
       this._teardownSelectable()
+    }
+  }
+
+  outOfWorkRange(date) {
+    const { workDays } = this.props
+
+    if (!workDays) {
+      return false
+    }
+
+    const day = daysOfWeek[date.getDay() - 1]
+    return !workDays.includes(day)
   }
 
   render() {
@@ -58,7 +82,6 @@ class BackgroundCells extends React.Component {
       range,
       getNow,
       getters,
-      date: currentDate,
       components: { dateCellWrapper: Wrapper },
     } = this.props
     let { selecting, startIdx, endIdx } = this.state
@@ -79,9 +102,7 @@ class BackgroundCells extends React.Component {
                   className,
                   selected && 'rbc-selected-cell',
                   dates.eq(date, current, 'day') && 'rbc-today',
-                  currentDate &&
-                    dates.month(currentDate) !== dates.month(date) &&
-                    'rbc-off-range-bg'
+                  this.outOfWorkRange(date) && 'rbc-off-range-bg'
                 )}
               />
             </Wrapper>
@@ -173,7 +194,7 @@ class BackgroundCells extends React.Component {
   }
 
   _selectSlot({ endIdx, startIdx, action, bounds, box }) {
-    if (endIdx !== -1 && startIdx !== -1)
+    if (endIdx !== -1 && startIdx !== -1) {
       this.props.onSelectSlot &&
         this.props.onSelectSlot({
           start: startIdx,
@@ -182,6 +203,7 @@ class BackgroundCells extends React.Component {
           bounds,
           box,
         })
+    }
   }
 }
 

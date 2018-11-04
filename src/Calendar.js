@@ -43,7 +43,7 @@ function isValidView(view, { views: _views }) {
  *
  * Big Calendar is unopiniated about editing and moving events, preferring to let you implement it in a way that makes
  * the most sense to your app. It also tries not to be prescriptive about your event data structures, just tell it
- * how to find the start and end datetimes and you can pass it whatever you want.
+ * how to find the start and end datetimes and you can pass it whatever you waent.
  *
  * One thing to note is that, `react-big-calendar` treats event start/end dates as an _exclusive_ range.
  * which means that the event spans up to, but not including, the end date. In the case
@@ -51,6 +51,12 @@ function isValidView(view, { views: _views }) {
  * event ending on `Apr 8th 12:00:00 am` will not appear on the 8th, whereas one ending
  * on `Apr 8th 12:01:00 am` will. If you want _inclusive_ ranges consider providing a
  * function `endAccessor` that returns the end date + 1 day for those events that end at midnight.
+ */
+/**
+ *
+ *
+ * @static
+ * @memberof Calendar
  */
 class Calendar extends React.Component {
   static propTypes = {
@@ -95,7 +101,7 @@ class Calendar extends React.Component {
      *  - end time
      *  - title
      *  - whether its an "all day" event or not
-     *  - any resource the event may be related to
+     *  - any resource the event may be a related too
      *
      * Each of these properties can be customized or generated dynamically by
      * setting the various "accessor" props. Without any configuration the default
@@ -252,7 +258,7 @@ class Calendar extends React.Component {
      * Callback fired when the visible date range changes. Returns an Array of dates
      * or an object with start and end dates for BUILTIN views.
      *
-     * Custom views may return something different.
+     * Cutom views may return something different.
      */
     onRangeChange: PropTypes.func,
 
@@ -428,6 +434,9 @@ class Calendar extends React.Component {
      */
     selectable: PropTypes.oneOf([true, false, 'ignoreEvents']),
 
+    /** Determines whether you want events to be resizable */
+    resizable: PropTypes.bool,
+
     /**
      * Specifies the number of miliseconds the user must press and hold on the screen for a touch
      * to be considered a "long press." Long presses are used for time slot selection on touch
@@ -460,10 +469,10 @@ class Calendar extends React.Component {
      *
      * ```js
      * (
-     * 	event: Object,
-     * 	start: Date,
-     * 	end: Date,
-     * 	isSelected: boolean
+     *  event: Object,
+     *  start: Date,
+     *  end: Date,
+     *  isSelected: boolean
      * ) => { className?: string, style?: Object }
      * ```
      */
@@ -532,12 +541,12 @@ class Calendar extends React.Component {
      * let formats = {
      *   dateFormat: 'dd',
      *
-     *   dayFormat: (date, , localizer) =>
+     *   dayFormat: (date, culture, localizer) =>
      *     localizer.format(date, 'DDD', culture),
      *
-     *   dayRangeHeaderFormat: ({ start, end }, culture, localizer) =>
-     *     localizer.format(start, { date: 'short' }, culture) + ' — ' +
-     *     localizer.format(end, { date: 'short' }, culture)
+     *   dayRangeHeaderFormat: ({ start, end }, culture, local) =>
+     *     local.format(start, { date: 'short' }, culture) + ' — ' +
+     *     local.format(end, { date: 'short' }, culture)
      * }
      *
      * <Calendar formats={formats} />
@@ -628,7 +637,7 @@ class Calendar extends React.Component {
      *   event: MyEvent, // used by each view (Month, Day, Week)
      *   toolbar: MyToolbar,
      *   agenda: {
-     *   	 event: MyAgendaEvent // with the agenda view use a different component to render events
+     *     event: MyAgendaEvent // with the agenda view use a different component to render events
      *   }
      * }
      * <Calendar components={components} />
@@ -690,8 +699,8 @@ class Calendar extends React.Component {
     elementProps: {},
     popup: false,
     toolbar: true,
-    view: views.MONTH,
-    views: [views.MONTH, views.WEEK, views.DAY, views.AGENDA],
+    view: views.SPLIT,
+    views: [views.MONTH, views.WEEK, views.DAY, views.AGENDA, views.SPLIT],
     step: 30,
     length: 30,
 
@@ -778,7 +787,8 @@ class Calendar extends React.Component {
     const views = this.props.views
 
     if (Array.isArray(views)) {
-      return transform(views, (obj, name) => (obj[name] = VIEWS[name]), {})
+      const r = transform(views, (obj, name) => (obj[name] = VIEWS[name]), {})
+      return r
     }
 
     if (typeof views === 'object') {
@@ -796,7 +806,6 @@ class Calendar extends React.Component {
 
   getView = () => {
     const views = this.getViews()
-
     return views[this.props.view]
   }
 
@@ -812,7 +821,10 @@ class Calendar extends React.Component {
     let {
       view,
       toolbar,
+      toolbarAsContainer,
       events,
+      workDays,
+      culture,
       style,
       className,
       elementProps,
@@ -823,7 +835,6 @@ class Calendar extends React.Component {
       components: _0,
       formats: _1,
       messages: _2,
-      culture: _3,
       ...props
     } = this.props
 
@@ -838,9 +849,64 @@ class Calendar extends React.Component {
       viewNames,
     } = this.state.context
 
+    // let CalContainer = components.container;
     let CalToolbar = components.toolbar || Toolbar
+
     const label = View.title(current, { localizer, length })
 
+    if (toolbarAsContainer) {
+      return (
+        <div
+          {...elementProps}
+          className={cn(className, 'rbc-calendar', props.rtl && 'rbc-is-rtl')}
+          style={style}
+        >
+          <CalToolbar
+            date={current}
+            view={view}
+            views={viewNames}
+            label={label}
+            onView={this.handleViewChange}
+            onNavigate={this.handleNavigate}
+            localizer={localizer}
+          >
+            <div
+              {...elementProps}
+              className={cn(
+                className,
+                'rbc-calendar',
+                'rbc-calendar-contained',
+                props.rtl && 'rbc-is-rtl'
+              )}
+              style={style}
+            >
+              <View
+                ref="view"
+                {...props}
+                culture={culture}
+                events={events}
+                workDays={workDays}
+                date={current}
+                getNow={getNow}
+                length={length}
+                localizer={localizer}
+                getters={getters}
+                components={components}
+                accessors={accessors}
+                showMultiDayTimes={showMultiDayTimes}
+                getDrilldownView={this.getDrilldownView}
+                onNavigate={this.handleNavigate}
+                onDrillDown={this.handleDrillDown}
+                onSelectEvent={this.handleSelectEvent}
+                onDoubleClickEvent={this.handleDoubleClickEvent}
+                onSelectSlot={this.handleSelectSlot}
+                onShowMore={this._showMore}
+              />
+            </div>
+          </CalToolbar>
+        </div>
+      )
+    }
     return (
       <div
         {...elementProps}
@@ -861,7 +927,9 @@ class Calendar extends React.Component {
         <View
           ref="view"
           {...props}
+          culture={culture}
           events={events}
+          workDays={workDays}
           date={current}
           getNow={getNow}
           length={length}
@@ -883,11 +951,10 @@ class Calendar extends React.Component {
   }
 
   handleRangeChange = (date, view) => {
-    let { onRangeChange, localizer } = this.props
-
+    let { onRangeChange } = this.props
     if (onRangeChange) {
       if (view.range) {
-        onRangeChange(view.range(date, { localizer }))
+        onRangeChange(view.range(date, {}))
       } else {
         warning(true, 'onRangeChange prop not supported for this view')
       }
@@ -937,7 +1004,8 @@ class Calendar extends React.Component {
       onDrillDown(date, view, this.drilldownView)
       return
     }
-    if (view) this.handleViewChange(view)
+
+    view && this.handleViewChange(view)
 
     this.handleNavigate(navigate.DATE, date)
   }

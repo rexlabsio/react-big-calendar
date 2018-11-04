@@ -72,13 +72,13 @@ class EventWrapper extends React.Component {
 
     let { children } = this.props
 
-    if (event.__isPreview)
+    if (event.__isPreview) {
       return React.cloneElement(children, {
         className: cn(children.props.className, 'rbc-addons-dnd-drag-preview'),
       })
+    }
 
-    const { draggable } = this.context
-    const { draggableAccessor, resizableAccessor } = draggable
+    const { draggableAccessor, resizableAccessor, draggable } = this.context
 
     const isDraggable = draggableAccessor
       ? !!get(event, draggableAccessor)

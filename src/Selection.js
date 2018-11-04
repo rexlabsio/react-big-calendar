@@ -110,7 +110,7 @@ class Selection {
   filter(items) {
     let box = this._selectRect
 
-    //not selecting
+    // not selecting
     if (!box || !this.selecting) return []
 
     return items.filter(this.isSelected, this)
@@ -197,8 +197,9 @@ class Selection {
       e.which === 3 ||
       e.button === 2 ||
       !isOverContainer(node, clientX, clientY)
-    )
+    ) {
       return
+    }
 
     if (!this.globalMouse && node && !contains(node, e.target)) {
       let { top, left, bottom, right } = normalizeDistance(0)
@@ -370,13 +371,14 @@ class Selection {
  * @return {Object}
  */
 function normalizeDistance(distance = 0) {
-  if (typeof distance !== 'object')
+  if (typeof distance !== 'object') {
     distance = {
       top: distance,
       left: distance,
       right: distance,
       bottom: distance,
     }
+  }
 
   return distance
 }
@@ -402,8 +404,7 @@ export function objectsCollide(nodeA, nodeB, tolerance = 0) {
     bottom: bBottom = bTop,
   } = getBoundsForNode(nodeB)
 
-  return !// 'a' bottom doesn't touch 'b' top
-  (
+  return !(
     aBottom - tolerance < bTop ||
     // 'a' top doesn't touch 'b' bottom
     aTop + tolerance > bBottom ||
@@ -435,7 +436,9 @@ export function getBoundsForNode(node) {
 }
 
 function pageOffset(dir) {
-  if (dir === 'left') return window.pageXOffset || document.body.scrollLeft || 0
+  if (dir === 'left') {
+    return window.pageXOffset || document.body.scrollLeft || 0
+  }
   if (dir === 'top') return window.pageYOffset || document.body.scrollTop || 0
 }
 export default Selection

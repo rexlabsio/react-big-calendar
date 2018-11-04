@@ -9,7 +9,6 @@ export default {
     slotMetrics: PropTypes.object.isRequired,
 
     selected: PropTypes.object,
-    isAllDay: PropTypes.bool,
 
     accessors: PropTypes.object.isRequired,
     localizer: PropTypes.object.isRequired,
@@ -28,7 +27,6 @@ export default {
   renderEvent(props, event) {
     let {
       selected,
-      isAllDay: _,
       accessors,
       getters,
       onSelect,
@@ -58,7 +56,7 @@ export default {
   },
 
   renderSpan(slots, len, key, content = ' ') {
-    let per = Math.abs(len) / slots * 100 + '%'
+    let per = (Math.abs(len) / slots) * 100 + '%'
 
     return (
       <div

@@ -3,11 +3,13 @@ import React from 'react'
 import EventRowMixin from './EventRowMixin'
 import { eventLevels } from './utils/eventLevels'
 import range from 'lodash/range'
+import { autobind } from 'core-decorators'
 
 let isSegmentInSlot = (seg, slot) => seg.left <= slot && seg.right >= slot
 let eventsInSlot = (segments, slot) =>
   segments.filter(seg => isSegmentInSlot(seg, slot)).length
 
+@autobind
 class EventEndingRow extends React.Component {
   static propTypes = {
     segments: PropTypes.array,
@@ -20,12 +22,15 @@ class EventEndingRow extends React.Component {
   }
 
   render() {
-    let { segments, slotMetrics: { slots } } = this.props
+    let {
+      segments,
+      slotMetrics: { slots },
+    } = this.props
     let rowSegments = eventLevels(segments).levels[0]
 
-    let current = 1,
-      lastEnd = 1,
-      row = []
+    let current = 1
+    let lastEnd = 1
+    let row = []
 
     while (current <= slots) {
       let key = '_lvl_' + current
@@ -89,7 +94,7 @@ class EventEndingRow extends React.Component {
         key={'sm_' + slot}
         href="#"
         className={'rbc-show-more'}
-        onClick={e => this.showMore(slot, e)}
+        onClick={this.showMore(slot)}
       >
         {localizer.messages.showMore(count)}
       </a>
@@ -98,9 +103,13 @@ class EventEndingRow extends React.Component {
     )
   }
 
-  showMore(slot, e) {
-    e.preventDefault()
-    this.props.onShowMore(slot)
+  showMore(slot) {
+    const { onShowMore } = this.props
+
+    return function(e) {
+      e.preventDefault()
+      onShowMore(slot)
+    }
   }
 }
 

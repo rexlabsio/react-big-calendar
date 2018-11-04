@@ -50,8 +50,9 @@ class EventContainerWrapper extends React.Component {
   }
 
   reset() {
-    if (this.state.event)
+    if (this.state.event) {
       this.setState({ event: null, top: null, height: null })
+    }
   }
 
   update(event, { startDate, endDate, top, height }) {
@@ -73,7 +74,7 @@ class EventContainerWrapper extends React.Component {
 
   handleMove = (point, boundaryBox) => {
     const { event } = this.context.draggable.dragAndDropAction
-    const { accessors, slotMetrics } = this.props
+    const { slotMetrics } = this.props
 
     if (!pointInColumn(boundaryBox, point)) {
       this.reset()
@@ -85,11 +86,9 @@ class EventContainerWrapper extends React.Component {
       boundaryBox
     )
 
-    let eventStart = accessors.start(event)
-    let eventEnd = accessors.end(event)
     let end = dates.add(
       currentSlot,
-      dates.diff(eventStart, eventEnd, 'minutes'),
+      dates.diff(event.start, event.end, 'minutes'),
       'minutes'
     )
 

@@ -14,8 +14,9 @@ export function accessor(data, field) {
     typeof data === 'object' &&
     data != null &&
     field in data
-  )
+  ) {
     value = data[field]
+  }
 
   return value
 }

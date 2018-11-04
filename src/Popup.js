@@ -42,10 +42,12 @@ class Popup extends React.Component {
     if (bottom > viewBottom || right > viewRight) {
       let topOffset, leftOffset
 
-      if (bottom > viewBottom)
+      if (bottom > viewBottom) {
         topOffset = bottom - viewBottom + (popupOffset.y || +popupOffset || 0)
-      if (right > viewRight)
+      }
+      if (right > viewRight) {
         leftOffset = right - viewRight + (popupOffset.x || +popupOffset || 0)
+      }
 
       this.setState({ topOffset, leftOffset }) //eslint-disable-line
     }
