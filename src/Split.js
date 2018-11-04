@@ -22,10 +22,10 @@ class Split extends React.Component {
 Split.navigate = (date, action) => {
   switch (action) {
     case navigate.PREVIOUS:
-      return dates.add(date, -1, 'week')
+      return dates.add(date, -1, 'day')
 
     case navigate.NEXT:
-      return dates.add(date, 1, 'week')
+      return dates.add(date, 1, 'day')
 
     default:
       return date
@@ -33,16 +33,9 @@ Split.navigate = (date, action) => {
 }
 
 Split.range = (date, { localizer }) => {
-  let firstOfWeek = localizer.startOfWeek()
-  let start = dates.startOf(date, 'week', firstOfWeek)
-  let end = dates.endOf(date, 'week', firstOfWeek)
-
-  return dates.range(start, end)
+  return [dates.startOf(date, 'day')]
 }
 
-Split.title = (date, { localizer }) => {
-  let [start, ...rest] = Split.range(date, { localizer })
-  return localizer.format({ start, end: rest.pop() }, 'dayRangeHeaderFormat')
-}
+Split.title = (date, { localizer }) => localizer.format(date, 'dayHeaderFormat')
 
 export default Split

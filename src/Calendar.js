@@ -841,6 +841,7 @@ class Calendar extends React.Component {
     current = current || getNow()
 
     let View = this.getView()
+
     const {
       accessors,
       components,

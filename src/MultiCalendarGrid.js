@@ -152,7 +152,7 @@ export default class MultiCalendarGrid extends Component {
     const groupedEvents = this.resources.groupEvents(events)
 
     return calendars.map(calendar => {
-      const { id, events } = calendar
+      const { id } = calendar
 
       return (
         <SplitColumn
@@ -165,11 +165,13 @@ export default class MultiCalendarGrid extends Component {
           // className={cn({ 'rbc-now': dates.eq(date, today, 'day') })}
           // key={i + '-' + jj}
           // date={date}
-          events={events.map(event => ({
-            ...event,
-            color: calendar.color,
-            userId: calendar.userId,
-          }))}
+          events={events
+            .map(event => ({
+              ...event,
+              color: calendar.color,
+              userId: calendar.userId,
+            }))
+            .filter(event => event.calendarId === id)}
         />
       )
     })
@@ -205,7 +207,9 @@ export default class MultiCalendarGrid extends Component {
       rangeEvents = []
 
     events.forEach(event => {
-      if (inRange(event, start, end, accessors)) {
+      const isInRange = inRange(event, start, end, accessors)
+
+      if (isInRange) {
         let eStart = accessors.start(event),
           eEnd = accessors.end(event)
 
