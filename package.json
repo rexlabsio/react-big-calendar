@@ -1,6 +1,6 @@
 {
   "name": "@rexlabs/react-big-calendar",
-  "version": "0.20.4",
+  "version": "0.20.5",
   "description": "Calendar! with events",
   "author": "Jason Quense <monastic.panic@gmail.com>",
   "repository": "intljusticemission/react-big-calendar",
@@ -92,7 +92,6 @@
     "mt-changelog": "^0.6.1",
     "prettier": "^1.14.3",
     "react": "^16.5.2",
-    "react-bootstrap": "^0.32.4",
     "react-docgen": "^3.0.0-rc.1",
     "react-dom": "^16.5.2",
     "react-tackle-box": "^2.1.0",
@@ -103,6 +102,7 @@
     "webpack-dev-server": "^3.1.8"
   },
   "dependencies": {
+    "react-bootstrap": "^0.32.4",
     "classnames": "^2.2.6",
     "date-arithmetic": "^3.0.0",
     "dom-helpers": "^2.3.0 || ^3.0.0",
