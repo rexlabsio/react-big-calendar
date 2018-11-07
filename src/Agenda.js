@@ -50,19 +50,7 @@ class Agenda extends React.Component {
       <div className="rbc-agenda-view">
         {events.length !== 0 ? (
           <React.Fragment>
-            <table ref="header" className="rbc-agenda-table">
-              <thead>
-                <tr>
-                  <th className="rbc-header" ref="dateCol">
-                    {messages.date}
-                  </th>
-                  <th className="rbc-header" ref="timeCol">
-                    {messages.time}
-                  </th>
-                  <th className="rbc-header">{messages.event}</th>
-                </tr>
-              </thead>
-            </table>
+            {this.renderHeader(messages)}
             <div className="rbc-agenda-content" ref="content">
               <table className="rbc-agenda-table">
                 <tbody ref="tbody">
@@ -78,14 +66,55 @@ class Agenda extends React.Component {
     )
   }
 
+  renderHeader = messages => {
+    const {
+      components: { header: AgendaHeader },
+    } = this.props
+
+    if (!AgendaHeader) {
+      return (
+        <table ref="header" className="rbc-agenda-table">
+          <thead>
+            <tr>
+              <th className="rbc-header" ref="dateCol">
+                {messages.date}
+              </th>
+              <th className="rbc-header" ref="timeCol">
+                {messages.time}
+              </th>
+              <th className="rbc-header">{messages.event}</th>
+            </tr>
+          </thead>
+        </table>
+      )
+    }
+
+    return <AgendaHeader messages={messages} />
+  }
+
   renderDay = (day, events, dayKey) => {
     let {
       selected,
       getters,
       accessors,
       localizer,
-      components: { event: Event, date: AgendaDate },
+      components: { event: Event, date: AgendaDate, day: AgendaDay },
     } = this.props
+
+    if (AgendaDay) {
+      return (
+        <AgendaDay
+          day={day}
+          events={events}
+          dayKey={dayKey}
+          selected={selected}
+          getters={getters}
+          accessors={accessors}
+          localizer={localizer}
+          components={{ Event, AgendaDate }}
+        />
+      )
+    }
 
     events = events.filter(e =>
       inRange(e, dates.startOf(day, 'day'), dates.endOf(day, 'day'), accessors)
