@@ -204,6 +204,7 @@ class MonthView extends React.Component {
         )}
       >
         <DateHeaderComponent
+          isCurrent={isCurrent}
           label={label}
           date={date}
           drilldownView={drilldownView}
