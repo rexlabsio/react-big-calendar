@@ -11,6 +11,14 @@ class Week extends React.Component {
 
   static defaultProps = TimeGrid.defaultProps
 
+  static range(date, { localizer }) {
+    let firstOfWeek = localizer.startOfWeek()
+    let start = dates.startOf(date, 'week', firstOfWeek)
+    let end = dates.endOf(date, 'week', firstOfWeek)
+  
+    return dates.range(start, end)
+  }  
+
   render() {
     let { date, ...props } = this.props
     let range = Week.range(date, this.props)
@@ -30,14 +38,6 @@ Week.navigate = (date, action) => {
     default:
       return date
   }
-}
-
-Week.range = (date, { localizer }) => {
-  let firstOfWeek = localizer.startOfWeek()
-  let start = dates.startOf(date, 'week', firstOfWeek)
-  let end = dates.endOf(date, 'week', firstOfWeek)
-
-  return dates.range(start, end)
 }
 
 Week.title = (date, { localizer }) => {

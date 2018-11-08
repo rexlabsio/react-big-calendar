@@ -10,16 +10,16 @@ class Day extends React.Component {
     date: PropTypes.instanceOf(Date).isRequired,
   }
 
+  static range(date) {
+    return [dates.startOf(date, 'day')]
+  }
+
   render() {
     let { date, ...props } = this.props
     let range = Day.range(date)
 
     return <TimeGrid {...props} range={range} eventOffset={10} />
   }
-}
-
-Day.range = date => {
-  return [dates.startOf(date, 'day')]
 }
 
 Day.navigate = (date, action) => {

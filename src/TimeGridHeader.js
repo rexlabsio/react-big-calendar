@@ -97,7 +97,11 @@ class TimeGridHeader extends React.Component {
       localizer,
       accessors,
       components,
+      getDrilldownView
     } = this.props
+
+    const ddv = getDrilldownView(date);
+    debugger;
 
     const resourceId = accessors.resourceId(resource)
     let eventsToDisplay = resource
@@ -152,7 +156,6 @@ class TimeGridHeader extends React.Component {
     }
 
     const groupedEvents = resources.groupEvents(events)
-
     return (
       <div
         style={style}

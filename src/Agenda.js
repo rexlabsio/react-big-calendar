@@ -28,11 +28,14 @@ class Agenda extends React.Component {
   }
 
   componentDidMount() {
-    this._adjustHeader()
+    if (this.props.components.day) {
+      console.warn('AgendaDay render prop must return <tr>...</tr>');
+    }
+    this._adjustHeader();
   }
 
   componentDidUpdate() {
-    this._adjustHeader()
+    this._adjustHeader();
   }
 
   render() {
@@ -101,10 +104,16 @@ class Agenda extends React.Component {
       components: { event: Event, date: AgendaDate, day: AgendaDay },
     } = this.props
 
+    events = events.filter(e =>
+      inRange(e, dates.startOf(day, 'day'), dates.endOf(day, 'day'), accessors)
+    );
+
     if (AgendaDay) {
       return (
         <AgendaDay
           day={day}
+          datesUtil={dates}
+          events={events}
           events={events}
           dayKey={dayKey}
           selected={selected}
@@ -116,9 +125,7 @@ class Agenda extends React.Component {
       )
     }
 
-    events = events.filter(e =>
-      inRange(e, dates.startOf(day, 'day'), dates.endOf(day, 'day'), accessors)
-    )
+
 
     return events.map((event, idx) => {
       let title = accessors.title(event)
@@ -199,6 +206,10 @@ class Agenda extends React.Component {
   }
 
   _adjustHeader = () => {
+    if (this.props.components.header) {
+      return;
+    }
+
     if (!this.refs.tbody) return
 
     let header = this.refs.header

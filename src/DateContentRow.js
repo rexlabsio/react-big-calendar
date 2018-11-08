@@ -132,6 +132,27 @@ class DateContentRow extends React.Component {
     )
   }
 
+  renderRowContent = () => {
+    const { range, renderForMeasure, components, renderHeader } = this.props
+    const { headerRowContent: HeaderRowContent } = components;
+
+    if (renderForMeasure) return this.renderDummy()
+
+    if (!!HeaderRowContent) {
+      return <HeaderRowContent {...this.props} />
+    }
+
+    if (!renderHeader) {
+      return null
+    }
+
+    return (
+      <div className="rbc-row " ref={this.createHeadingRef}>
+        {range.map(this.renderHeadingCell)}
+      </div>
+    )
+  }
+
   render() {
     const {
       date,
@@ -196,11 +217,7 @@ class DateContentRow extends React.Component {
         />
 
         <div className="rbc-row-content">
-          {renderHeader && (
-            <div className="rbc-row " ref={this.createHeadingRef}>
-              {range.map(this.renderHeadingCell)}
-            </div>
-          )}
+          {this.renderRowContent()}
           <WeekWrapper isAllDay={isAllDay} {...eventRowProps}>
             {levels.map((segs, idx) => (
               <EventRow key={idx} segments={segs} {...eventRowProps} />
