@@ -24,10 +24,7 @@ class SplitWeek extends React.Component {
     let range = SplitWeek.range(date, this.props)
 
     return (
-      <div>
-        <p>Split Week view</p>
         <MultiCalendarWeekGrid {...props} range={range} eventOffset={15} />
-      </div>
     );
   }
 }

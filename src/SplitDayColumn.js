@@ -87,6 +87,7 @@ class SplitColumn extends React.Component {
       resource,
       accessors,
       localizer,
+      onCellClick,
       getters: { dayProp, ...getters },
       components: { eventContainerWrapper: EventContainer, ...components },
     } = this.props
@@ -112,6 +113,7 @@ class SplitColumn extends React.Component {
       >
         {slotMetrics.groups.map((grp, idx) => (
           <SplitDayViewSlotGroup
+            onCellClick={onCellClick}
             key={idx}
             group={grp}
             resource={resource}

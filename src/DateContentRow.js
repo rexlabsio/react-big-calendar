@@ -171,6 +171,7 @@ class DateContentRow extends React.Component {
       renderHeader,
       onSelect,
       localizer,
+      onCellClick,
       onSelectStart,
       onSelectEnd,
       onDoubleClick,
@@ -195,6 +196,7 @@ class DateContentRow extends React.Component {
       onSelect,
       onDoubleClick,
       resourceId,
+      onCellClick,
       slotMetrics: metrics,
     }
 
@@ -202,6 +204,7 @@ class DateContentRow extends React.Component {
       <div className={className}>
         <BackgroundCells
           date={date}
+          onCellClick={onCellClick}
           workDays={workDays}
           getNow={getNow}
           rtl={rtl}

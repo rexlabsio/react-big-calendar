@@ -19,6 +19,7 @@ export default class SplitDayViewSlotGroup extends Component {
       resource,
       group,
       getters,
+      onCellClick,
       components: { timeSlotWrapper: Wrapper = BackgroundWrapper } = {},
     } = this.props
 
@@ -31,6 +32,7 @@ export default class SplitDayViewSlotGroup extends Component {
               <div
                 {...slotProps}
                 className={cn('rbc-time-slot', slotProps.className)}
+                onClick={e => onCellClick(value, e)}
               >
                 {renderSlot && renderSlot(value, idx)}
               </div>

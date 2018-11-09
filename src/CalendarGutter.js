@@ -5,6 +5,8 @@ import React, { Component } from 'react'
 import * as TimeSlotUtils from './utils/TimeSlots'
 import TimeSlotGroup from './TimeSlotGroup'
 
+const noop = () => {};
+
 export default class TimeGutter extends Component {
   static propTypes = {
     min: PropTypes.instanceOf(Date).isRequired,
@@ -55,6 +57,7 @@ export default class TimeGutter extends Component {
         {this.slotMetrics.groups.map((grp, idx) => {
           return (
             <TimeSlotGroup
+              onCellClick={noop}
               key={idx}
               group={grp}
               resource={resource}

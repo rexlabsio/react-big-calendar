@@ -80,6 +80,7 @@ class BackgroundCells extends React.Component {
       range,
       getNow,
       getters,
+      onCellClick,
       components: { dateCellWrapper: Wrapper },
     } = this.props
     let { selecting, startIdx, endIdx } = this.state
@@ -94,6 +95,7 @@ class BackgroundCells extends React.Component {
             <Wrapper key={index} value={date} range={range}>
               <div
                 style={style}
+                onClick={e => onCellClick(date, e)}
                 className={cn(
                   'rbc-day-bg',
                   className,

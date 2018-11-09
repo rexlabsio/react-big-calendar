@@ -147,6 +147,7 @@ class MonthView extends React.Component {
       accessors,
       workDays,
       getters,
+      onCellClick,
     } = this.props
 
     const { needLimitMeasure, rowLimit } = this.state
@@ -177,6 +178,7 @@ class MonthView extends React.Component {
         renderForMeasure={needLimitMeasure}
         onShowMore={this.handleShowMore}
         onSelect={this.handleSelectEvent}
+        onCellClick={onCellClick}
         onDoubleClick={this.handleDoubleClickEvent}
         onSelectSlot={this.handleSelectSlot}
         longPressThreshold={longPressThreshold}

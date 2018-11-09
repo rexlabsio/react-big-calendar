@@ -87,6 +87,7 @@ class DayColumn extends React.Component {
       resource,
       accessors,
       localizer,
+      onCellClick,
       getters: { dayProp, ...getters },
       components: { eventContainerWrapper: EventContainer, ...components },
     } = this.props
@@ -117,6 +118,7 @@ class DayColumn extends React.Component {
             resource={resource}
             getters={getters}
             components={components}
+            onCellClick={onCellClick}
           />
         ))}
         <EventContainer
