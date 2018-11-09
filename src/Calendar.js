@@ -699,8 +699,8 @@ class Calendar extends React.Component {
     elementProps: {},
     popup: false,
     toolbar: true,
-    view: views.SPLIT,
-    views: [views.MONTH, views.WEEK, views.DAY, views.AGENDA, views.SPLIT],
+    view: views.WEEK,
+    views: [views.MONTH, views.WEEK, views.DAY, views.AGENDA, views.SPLIT_DAY, views.SPLIT_WEEK],
     step: 30,
     length: 30,
 
@@ -805,8 +805,18 @@ class Calendar extends React.Component {
   }
 
   getView = () => {
+    const { view, splitDay, splitWeek } = this.props;
     const views = this.getViews()
-    return views[this.props.view]
+
+    if (view === 'day') {
+      return splitDay ? views.split_day : views.day
+    }
+    
+    if (view === 'week') {
+      return splitWeek ? views.split_week : views.week
+    }
+
+    return views[view]
   }
 
   getDrilldownView = date => {

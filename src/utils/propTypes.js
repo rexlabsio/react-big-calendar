@@ -12,7 +12,7 @@ export let eventComponent = PropTypes.oneOfType([
     week: elementType,
     day: elementType,
     agenda: elementType,
-    split: elementType,
+    splitDay: elementType,
   }),
 ])
 

@@ -2,20 +2,24 @@ import PropTypes from 'prop-types'
 import React from 'react'
 import dates from './utils/dates'
 import { navigate } from './utils/constants'
-import MultiCalendarGrid from './MultiCalendarGrid'
+import MultiCalendarDayGrid from './MultiCalendarDayGrid'
 
 class Split extends React.Component {
   static propTypes = {
     date: PropTypes.instanceOf(Date).isRequired,
   }
 
-  static defaultProps = MultiCalendarGrid.defaultProps
+  static defaultProps = MultiCalendarDayGrid.defaultProps
+
+  static range = (date, { localizer }) => {
+    return [dates.startOf(date, 'day')]
+  }
 
   render() {
     let { date, ...props } = this.props
     let range = Split.range(date, this.props)
 
-    return <MultiCalendarGrid {...props} range={range} eventOffset={15} />
+    return <MultiCalendarDayGrid {...props} range={range} eventOffset={15} />
   }
 }
 
@@ -30,10 +34,6 @@ Split.navigate = (date, action) => {
     default:
       return date
   }
-}
-
-Split.range = (date, { localizer }) => {
-  return [dates.startOf(date, 'day')]
 }
 
 Split.title = (date, { localizer }) => localizer.format(date, 'dayHeaderFormat')

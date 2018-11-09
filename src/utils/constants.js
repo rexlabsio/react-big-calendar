@@ -6,7 +6,8 @@ export let navigate = {
 }
 
 export let views = {
-  SPLIT: 'split',
+  SPLIT_DAY: 'split_day',
+  SPLIT_WEEK: 'split_week',
   MONTH: 'month',
   WEEK: 'week',
   WORK_WEEK: 'work_week',

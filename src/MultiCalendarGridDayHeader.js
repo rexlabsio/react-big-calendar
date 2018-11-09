@@ -49,7 +49,11 @@ class TimeGridHeader extends React.Component {
     } = this.props
 
     return calendars.map(calendar => {
-      const header = <p>{calendar.name}</p>
+      const header  = HeaderComponent ? (
+        <HeaderComponent label={calendar.name} />
+      ) : (
+        <p>{calendar.name}</p>
+      );
 
       return (
         <div key={calendar.id} className={cn('rbc-header')}>
@@ -58,6 +62,7 @@ class TimeGridHeader extends React.Component {
       )
     })
   }
+
   renderRow = resource => {
     let {
       events,

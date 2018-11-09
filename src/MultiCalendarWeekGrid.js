@@ -5,17 +5,16 @@ import React, { Component } from 'react'
 import { findDOMNode } from 'react-dom'
 
 import dates from './utils/dates'
-import SplitColumn from './SplitColumn'
-import TimeGutter from './TimeGutter'
+import DayColumn from './DayColumn'
+import CalendarGutter from './CalendarGutter'
 
 import getWidth from 'dom-helpers/query/width'
-import MultiCalendarGridHeader from './MultiCalendarGridHeader'
+import TimeGridHeader from './TimeGridHeader'
 import { notify } from './utils/helpers'
 import { inRange, sortEvents } from './utils/eventLevels'
 import Resources from './utils/Resources'
-import _ from 'lodash'
 
-export default class MultiCalendarGrid extends Component {
+export default class TimeGrid extends Component {
   static propTypes = {
     events: PropTypes.array.isRequired,
     resources: PropTypes.array,
@@ -148,39 +147,43 @@ export default class MultiCalendarGrid extends Component {
   }
 
   renderEvents(range, events, today) {
-    let { min, max, components, accessors, localizer, calendars } = this.props
+    let { min, max, components, accessors, localizer } = this.props
+
     const groupedEvents = this.resources.groupEvents(events)
 
-    return calendars.map(calendar => {
-      const { id } = calendar
+    return this.resources.map(([id, resource], i) =>
+      range.map((date, jj) => {
+        let daysEvents = (groupedEvents.get(id) || []).filter(event =>
+          dates.inRange(
+            date,
+            accessors.start(event),
+            accessors.end(event),
+            'day'
+          )
+        )
 
-      return (
-        <SplitColumn
-          {...this.props}
-          localizer={localizer}
-          // min={dates.merge(date, min)}
-          // max={dates.merge(date, max)}
-          resource={id}
-          components={components}
-          // className={cn({ 'rbc-now': dates.eq(date, today, 'day') })}
-          // key={i + '-' + jj}
-          // date={date}
-          events={events
-            .map(event => ({
-              ...event,
-              color: calendar.color,
-              userId: calendar.userId,
-            }))
-            .filter(event => event.calendarId === id)}
-        />
-      )
-    })
+        return (
+          <DayColumn
+            {...this.props}
+            localizer={localizer}
+            min={dates.merge(date, min)}
+            max={dates.merge(date, max)}
+            resource={resource && id}
+            components={components}
+            className={cn({ 'rbc-now': dates.eq(date, today, 'day') })}
+            key={i + '-' + jj}
+            date={date}
+            events={daysEvents}
+          />
+        )
+      })
+    )
   }
 
   render() {
     let {
-      calendars,
       events,
+      calendars,
       range,
       width,
       selected,
@@ -207,9 +210,7 @@ export default class MultiCalendarGrid extends Component {
       rangeEvents = []
 
     events.forEach(event => {
-      const isInRange = inRange(event, start, end, accessors)
-
-      if (isInRange) {
+      if (inRange(event, start, end, accessors)) {
         let eStart = accessors.start(event),
           eEnd = accessors.end(event)
 
@@ -231,9 +232,8 @@ export default class MultiCalendarGrid extends Component {
       <div
         className={cn('rbc-time-view', resources && 'rbc-time-view-resources')}
       >
-        <MultiCalendarGridHeader
+        <TimeGridHeader
           range={range}
-          calendars={calendars}
           events={allDayEvents}
           width={width}
           getNow={getNow}
@@ -258,7 +258,8 @@ export default class MultiCalendarGrid extends Component {
           className="rbc-time-content"
           onScroll={this.handleScroll}
         >
-          <TimeGutter
+          <CalendarGutter
+            calendars={calendars}
             date={start}
             ref={this.gutterRef}
             localizer={localizer}

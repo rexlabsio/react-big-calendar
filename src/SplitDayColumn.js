@@ -10,7 +10,7 @@ import { isSelected } from './utils/selection'
 
 import { notify } from './utils/helpers'
 import * as DayEventLayout from './utils/DayEventLayout'
-import SplitViewSlotGroup from './SplitViewSlotGroup'
+import SplitDayViewSlotGroup from './SplitDayViewSlotGroup'
 import TimeGridEvent from './TimeGridEvent'
 
 class SplitColumn extends React.Component {
@@ -111,7 +111,7 @@ class SplitColumn extends React.Component {
         )}
       >
         {slotMetrics.groups.map((grp, idx) => (
-          <SplitViewSlotGroup
+          <SplitDayViewSlotGroup
             key={idx}
             group={grp}
             resource={resource}
