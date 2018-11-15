@@ -134,11 +134,11 @@ class DateContentRow extends React.Component {
 
   renderRowContent = () => {
     const { range, renderForMeasure, components, renderHeader } = this.props
-    const { headerRowContent: HeaderRowContent } = components;
+    const { headerRowContent: HeaderRowContent } = components
 
     if (renderForMeasure) return this.renderDummy()
 
-    if (!!HeaderRowContent) {
+    if (HeaderRowContent) {
       return <HeaderRowContent {...this.props} />
     }
 
@@ -165,10 +165,9 @@ class DateContentRow extends React.Component {
       accessors,
       getters,
       components,
-      workDays,
+      workingHours,
 
       getNow,
-      renderHeader,
       onSelect,
       localizer,
       onCellClick,
@@ -205,7 +204,7 @@ class DateContentRow extends React.Component {
         <BackgroundCells
           date={date}
           onCellClick={onCellClick}
-          workDays={workDays}
+          workingHours={workingHours}
           getNow={getNow}
           rtl={rtl}
           range={range}

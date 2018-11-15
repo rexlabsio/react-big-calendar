@@ -3,7 +3,6 @@ import cn from 'classnames'
 import scrollbarSize from 'dom-helpers/util/scrollbarSize'
 import React from 'react'
 
-import dates from './utils/dates'
 import DateContentRow from './DateContentRow'
 import Header from './Header'
 import { notify } from './utils/helpers'
@@ -12,6 +11,7 @@ class TimeGridHeader extends React.Component {
   static propTypes = {
     range: PropTypes.array.isRequired,
     events: PropTypes.array.isRequired,
+    calendars: PropTypes.array.isRequired,
     resources: PropTypes.object,
     getNow: PropTypes.func.isRequired,
     isOverflowing: PropTypes.bool,
@@ -41,19 +41,18 @@ class TimeGridHeader extends React.Component {
     notify(this.props.onDrillDown, [date, view])
   }
 
-  renderHeaderCells(range) {
+  renderHeaderCells() {
     let {
       calendars,
-      getters: { dayProp },
       components: { header: HeaderComponent = Header },
     } = this.props
 
     return calendars.map(calendar => {
-      const header  = HeaderComponent ? (
+      const header = HeaderComponent ? (
         <HeaderComponent label={calendar.name} />
       ) : (
         <p>{calendar.name}</p>
-      );
+      )
 
       return (
         <div key={calendar.id} className={cn('rbc-header')}>
@@ -153,13 +152,10 @@ class TimeGridHeader extends React.Component {
                 </div>
               </div>
             )}
-            {/* For rendering only one day no need to show the headers */}
-            {calendars.length > 1 && (
-              <div className="rbc-row rbc-time-header-cell">
-                {this.renderHeaderCells(calendars)}
-              </div>
-            )}
-            {/* <DateContentRow
+            <div className="rbc-row rbc-time-header-cell">
+              {this.renderHeaderCells(calendars)}
+            </div>
+            <DateContentRow
               isAllDay
               rtl={rtl}
               getNow={getNow}
@@ -167,7 +163,7 @@ class TimeGridHeader extends React.Component {
               range={range}
               events={groupedEvents.get(id) || []}
               resourceId={resource && id}
-              className='rbc-allday-cell'
+              className="rbc-allday-cell"
               selectable={selectable}
               selected={this.props.selected}
               components={components}
@@ -178,7 +174,7 @@ class TimeGridHeader extends React.Component {
               onDoubleClick={this.props.onDoubleClickEvent}
               onSelectSlot={this.props.onSelectSlot}
               longPressThreshold={this.props.longPressThreshold}
-            /> */}
+            />
           </div>
         ))}
       </div>

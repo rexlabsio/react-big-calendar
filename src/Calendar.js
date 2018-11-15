@@ -700,7 +700,14 @@ class Calendar extends React.Component {
     popup: false,
     toolbar: true,
     view: views.WEEK,
-    views: [views.MONTH, views.WEEK, views.DAY, views.AGENDA, views.SPLIT_DAY, views.SPLIT_WEEK],
+    views: [
+      views.MONTH,
+      views.WEEK,
+      views.DAY,
+      views.AGENDA,
+      views.SPLIT_DAY,
+      views.SPLIT_WEEK,
+    ],
     step: 30,
     length: 30,
 
@@ -805,13 +812,13 @@ class Calendar extends React.Component {
   }
 
   getView = () => {
-    const { view, splitDay, splitWeek } = this.props;
+    const { view, splitDay, splitWeek } = this.props
     const views = this.getViews()
 
     if (view === 'day') {
       return splitDay ? views.split_day : views.day
     }
-    
+
     if (view === 'week') {
       return splitWeek ? views.split_week : views.week
     }
@@ -833,7 +840,7 @@ class Calendar extends React.Component {
       toolbar,
       toolbarAsContainer,
       events,
-      workDays,
+      workingHours,
       culture,
       style,
       className,
@@ -896,7 +903,7 @@ class Calendar extends React.Component {
                 {...props}
                 culture={culture}
                 events={events}
-                workDays={workDays}
+                workingHours={workingHours}
                 date={current}
                 getNow={getNow}
                 length={length}
@@ -940,7 +947,7 @@ class Calendar extends React.Component {
           {...props}
           culture={culture}
           events={events}
-          workDays={workDays}
+          workingHours={workingHours}
           date={current}
           getNow={getNow}
           length={length}

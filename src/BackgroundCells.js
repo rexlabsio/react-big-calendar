@@ -9,20 +9,20 @@ import { dateCellSelection, getSlotAtX, pointInBox } from './utils/selection'
 import Selection, { getBoundsForNode, isEvent } from './Selection'
 
 const daysOfWeek = [
+  'Sunday',
   'Monday',
   'Tuesday',
   'Wednesday',
   'Thursday',
   'Friday',
   'Saturday',
-  'Sunday',
 ]
 
 class BackgroundCells extends React.Component {
   static propTypes = {
     date: PropTypes.instanceOf(Date),
     getNow: PropTypes.func.isRequired,
-    workDays: PropTypes.arrayOf(PropTypes.string),
+    workingHours: PropTypes.arrayOf(PropTypes.string),
     i: PropTypes.object.isRequired,
     components: PropTypes.object.isRequired,
 
@@ -30,10 +30,12 @@ class BackgroundCells extends React.Component {
     dayPropGetter: PropTypes.func,
     selectable: PropTypes.oneOf([true, false, 'ignoreEvents']),
     longPressThreshold: PropTypes.number,
+    getters: PropTypes.object.isRequired,
 
     onSelectSlot: PropTypes.func.isRequired,
     onSelectEnd: PropTypes.func,
     onSelectStart: PropTypes.func,
+    onCellClick: PropTypes.func,
 
     range: PropTypes.arrayOf(PropTypes.instanceOf(Date)),
     rtl: PropTypes.bool,
@@ -64,15 +66,23 @@ class BackgroundCells extends React.Component {
     }
   }
 
-  outOfWorkRange = (date) => {
-    const { workDays } = this.props
+  outOfWorkRange = date => {
+    const { workingHours } = this.props
 
-    if (!workDays) {
+    if (!workingHours) {
       return false
     }
 
-    const day = daysOfWeek[date.getDay() - 1]
-    return !workDays.includes(day)
+    const hour = date.getHours()
+    const day = daysOfWeek[date.getDay()]
+
+    const range = workingHours[day]
+
+    if (!range) {
+      return false
+    }
+
+    return hour >= parseInt(range.from) && hour < parseInt(range.to)
   }
 
   render() {
