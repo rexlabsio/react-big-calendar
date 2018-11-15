@@ -66,7 +66,7 @@ class TimeGridHeader extends React.Component {
       )
 
       const calendarEvents = events.filter(
-        event => event.calendarId === event.id
+        event => event.calendarId === calendar.id
       )
       const groupedEvents = resources.groupEvents(calendarEvents)
 
