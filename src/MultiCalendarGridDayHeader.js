@@ -30,6 +30,7 @@ class TimeGridHeader extends React.Component {
 
     onSelectSlot: PropTypes.func,
     onSelectEvent: PropTypes.func,
+    onCellClick: PropTypes.func,
     onDoubleClickEvent: PropTypes.func,
     onDrillDown: PropTypes.func,
     getDrilldownView: PropTypes.func.isRequired,
@@ -49,15 +50,13 @@ class TimeGridHeader extends React.Component {
       calendars,
       getNow,
       accessors,
+      resources,
       selectable,
       components,
       getters,
       localizer,
-      resources,
       components: { header: HeaderComponent = Header },
     } = this.props
-
-    const groupedEvents = resources.groupEvents(events)
 
     return calendars.map(calendar => {
       const header = HeaderComponent ? (
@@ -65,6 +64,11 @@ class TimeGridHeader extends React.Component {
       ) : (
         <p>{calendar.name}</p>
       )
+
+      const calendarEvents = events.filter(
+        event => event.calendarId === event.id
+      )
+      const groupedEvents = resources.groupEvents(calendarEvents)
 
       return (
         <div key={calendar.id} className={cn('rbc-header')}>
@@ -87,6 +91,7 @@ class TimeGridHeader extends React.Component {
             onSelect={this.props.onSelectEvent}
             onDoubleClick={this.props.onDoubleClickEvent}
             onSelectSlot={this.props.onSelectSlot}
+            onCellClick={this.props.onCellClick}
             longPressThreshold={this.props.longPressThreshold}
           />
         </div>
