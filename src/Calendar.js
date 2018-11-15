@@ -840,7 +840,6 @@ class Calendar extends React.Component {
       toolbar,
       toolbarAsContainer,
       events,
-      workingHours,
       culture,
       style,
       className,
@@ -903,7 +902,6 @@ class Calendar extends React.Component {
                 {...props}
                 culture={culture}
                 events={events}
-                workingHours={workingHours}
                 date={current}
                 getNow={getNow}
                 length={length}
@@ -947,7 +945,6 @@ class Calendar extends React.Component {
           {...props}
           culture={culture}
           events={events}
-          workingHours={workingHours}
           date={current}
           getNow={getNow}
           length={length}

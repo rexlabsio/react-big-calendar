@@ -165,7 +165,6 @@ class DateContentRow extends React.Component {
       accessors,
       getters,
       components,
-      workingHours,
 
       getNow,
       onSelect,
@@ -204,7 +203,6 @@ class DateContentRow extends React.Component {
         <BackgroundCells
           date={date}
           onCellClick={onCellClick}
-          workingHours={workingHours}
           getNow={getNow}
           rtl={rtl}
           range={range}

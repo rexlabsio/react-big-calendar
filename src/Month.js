@@ -145,7 +145,6 @@ class MonthView extends React.Component {
       localizer,
       longPressThreshold,
       accessors,
-      workingHours,
       getters,
       onCellClick,
     } = this.props
@@ -163,7 +162,6 @@ class MonthView extends React.Component {
         container={this.getContainer}
         className="rbc-month-row"
         getNow={getNow}
-        workingHours={workingHours}
         date={date}
         range={week}
         events={events}

@@ -8,21 +8,10 @@ import { notify } from './utils/helpers'
 import { dateCellSelection, getSlotAtX, pointInBox } from './utils/selection'
 import Selection, { getBoundsForNode, isEvent } from './Selection'
 
-const daysOfWeek = [
-  'Sunday',
-  'Monday',
-  'Tuesday',
-  'Wednesday',
-  'Thursday',
-  'Friday',
-  'Saturday',
-]
-
 class BackgroundCells extends React.Component {
   static propTypes = {
     date: PropTypes.instanceOf(Date),
     getNow: PropTypes.func.isRequired,
-    workingHours: PropTypes.arrayOf(PropTypes.string),
     i: PropTypes.object.isRequired,
     components: PropTypes.object.isRequired,
 
@@ -66,25 +55,6 @@ class BackgroundCells extends React.Component {
     }
   }
 
-  outOfWorkRange = date => {
-    const { workingHours } = this.props
-
-    if (!workingHours) {
-      return false
-    }
-
-    const hour = date.getHours()
-    const day = daysOfWeek[date.getDay()]
-
-    const range = workingHours[day]
-
-    if (!range) {
-      return false
-    }
-
-    return hour >= parseInt(range.from) && hour < parseInt(range.to)
-  }
-
   render() {
     let {
       range,
@@ -110,8 +80,7 @@ class BackgroundCells extends React.Component {
                   'rbc-day-bg',
                   className,
                   selected && 'rbc-selected-cell',
-                  dates.eq(date, current, 'day') && 'rbc-today',
-                  this.outOfWorkRange(date) && 'rbc-off-range-bg'
+                  dates.eq(date, current, 'day') && 'rbc-today'
                 )}
               />
             </Wrapper>

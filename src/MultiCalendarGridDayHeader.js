@@ -41,11 +41,23 @@ class TimeGridHeader extends React.Component {
     notify(this.props.onDrillDown, [date, view])
   }
 
-  renderHeaderCells() {
+  renderHeaderCells(id, resource) {
     let {
+      rtl,
+      range,
+      events,
       calendars,
+      getNow,
+      accessors,
+      selectable,
+      components,
+      getters,
+      localizer,
+      resources,
       components: { header: HeaderComponent = Header },
     } = this.props
+
+    const groupedEvents = resources.groupEvents(events)
 
     return calendars.map(calendar => {
       const header = HeaderComponent ? (
@@ -56,52 +68,30 @@ class TimeGridHeader extends React.Component {
 
       return (
         <div key={calendar.id} className={cn('rbc-header')}>
-          <span>{header}</span>
+          {header}
+          <DateContentRow
+            isAllDay
+            rtl={rtl}
+            getNow={getNow}
+            minRows={2}
+            range={range}
+            events={groupedEvents.get(id) || []}
+            resourceId={resource && id}
+            className="rbc-allday-cell rbc-allday-split-cell"
+            selectable={selectable}
+            selected={this.props.selected}
+            components={components}
+            accessors={accessors}
+            getters={getters}
+            localizer={localizer}
+            onSelect={this.props.onSelectEvent}
+            onDoubleClick={this.props.onDoubleClickEvent}
+            onSelectSlot={this.props.onSelectSlot}
+            longPressThreshold={this.props.longPressThreshold}
+          />
         </div>
       )
     })
-  }
-
-  renderRow = resource => {
-    let {
-      events,
-      rtl,
-      selectable,
-      getNow,
-      range,
-      getters,
-      localizer,
-      accessors,
-      components,
-    } = this.props
-
-    const resourceId = accessors.resourceId(resource)
-    let eventsToDisplay = resource
-      ? events.filter(event => accessors.resource(event) === resourceId)
-      : events
-
-    return (
-      <DateContentRow
-        isAllDay
-        rtl={rtl}
-        getNow={getNow}
-        minRows={2}
-        range={range}
-        events={eventsToDisplay}
-        resourceId={resourceId}
-        className="rbc-allday-cell"
-        selectable={selectable}
-        selected={this.props.selected}
-        components={components}
-        accessors={accessors}
-        getters={getters}
-        localizer={localizer}
-        onSelect={this.props.onSelectEvent}
-        onDoubleClick={this.props.onDoubleClickEvent}
-        onSelectSlot={this.props.onSelectSlot}
-        longPressThreshold={this.props.longPressThreshold}
-      />
-    )
   }
 
   render() {
@@ -109,16 +99,8 @@ class TimeGridHeader extends React.Component {
       width,
       rtl,
       resources,
-      range,
-      events,
-      calendars,
-      getNow,
       accessors,
-      selectable,
-      components,
-      getters,
       scrollRef,
-      localizer,
       isOverflowing,
       components: { timeGutterHeader: TimeGutterHeader },
     } = this.props
@@ -127,8 +109,6 @@ class TimeGridHeader extends React.Component {
     if (isOverflowing) {
       style[rtl ? 'marginLeft' : 'marginRight'] = `${scrollbarSize()}px`
     }
-
-    const groupedEvents = resources.groupEvents(events)
 
     return (
       <div
@@ -153,28 +133,8 @@ class TimeGridHeader extends React.Component {
               </div>
             )}
             <div className="rbc-row rbc-time-header-cell">
-              {this.renderHeaderCells(calendars)}
+              {this.renderHeaderCells(id, resource)}
             </div>
-            <DateContentRow
-              isAllDay
-              rtl={rtl}
-              getNow={getNow}
-              minRows={2}
-              range={range}
-              events={groupedEvents.get(id) || []}
-              resourceId={resource && id}
-              className="rbc-allday-cell"
-              selectable={selectable}
-              selected={this.props.selected}
-              components={components}
-              accessors={accessors}
-              getters={getters}
-              localizer={localizer}
-              onSelect={this.props.onSelectEvent}
-              onDoubleClick={this.props.onDoubleClickEvent}
-              onSelectSlot={this.props.onSelectSlot}
-              longPressThreshold={this.props.longPressThreshold}
-            />
           </div>
         ))}
       </div>
