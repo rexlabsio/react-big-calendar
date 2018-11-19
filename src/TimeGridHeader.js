@@ -41,7 +41,7 @@ class TimeGridHeader extends React.Component {
     notify(this.props.onDrillDown, [date, view])
   }
 
-  renderHeaderCells(range) {
+  renderHeaderCells(range, idx) {
     let {
       localizer,
       getDrilldownView,
@@ -60,7 +60,7 @@ class TimeGridHeader extends React.Component {
 
       let header = (
         <HeaderComponent
-          index={i}
+          index={idx}
           date={date}
           label={label}
           localizer={localizer}
@@ -185,7 +185,7 @@ class TimeGridHeader extends React.Component {
                 range.length <= 1 ? ' rbc-time-header-cell-single-day' : ''
               }`}
             >
-              {this.renderHeaderCells(range)}
+              {this.renderHeaderCells(range, idx)}
             </div>
             <DateContentRow
               isAllDay
