@@ -59,7 +59,12 @@ class TimeGridHeader extends React.Component {
       const { className, style } = dayProp(date)
 
       let header = (
-        <HeaderComponent date={date} label={label} localizer={localizer} />
+        <HeaderComponent
+          index={i}
+          date={date}
+          label={label}
+          localizer={localizer}
+        />
       )
 
       return (

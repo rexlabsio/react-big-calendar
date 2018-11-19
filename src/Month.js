@@ -221,6 +221,7 @@ class MonthView extends React.Component {
     return dates.range(first, last, 'day').map((day, idx) => (
       <div key={'header_' + idx} className="rbc-header">
         <HeaderComponent
+          index={idx}
           date={day}
           localizer={localizer}
           label={localizer.format(day, 'weekdayFormat')}
