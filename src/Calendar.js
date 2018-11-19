@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types'
-import React from 'react'
+import React, { Fragment } from 'react'
 import uncontrollable from 'uncontrollable'
 import cn from 'classnames'
 import {
@@ -17,7 +17,6 @@ import { mergeWithDefaults } from './localizer'
 import message from './utils/messages'
 import moveDate from './utils/move'
 import VIEWS from './Views'
-import Toolbar from './Toolbar'
 import NoopWrapper from './NoopWrapper'
 
 import omit from 'lodash/omit'
@@ -838,7 +837,6 @@ class Calendar extends React.Component {
   render() {
     let {
       view,
-      toolbar,
       events,
       style,
       className,
@@ -865,7 +863,7 @@ class Calendar extends React.Component {
       viewNames,
     } = this.state.context
 
-    let CalToolbar = components.toolbar || Toolbar
+    let Container = components.container || Fragment
     const label = View.title(current, { localizer, length })
 
     return (
@@ -874,37 +872,36 @@ class Calendar extends React.Component {
         className={cn(className, 'rbc-calendar', props.rtl && 'rbc-is-rtl')}
         style={style}
       >
-        {toolbar && (
-          <CalToolbar
-            date={current}
-            view={view}
-            views={viewNames}
-            label={label}
-            onView={this.handleViewChange}
-            onNavigate={this.handleNavigate}
-            localizer={localizer}
-          />
-        )}
-        <View
-          ref="view"
-          {...props}
-          events={events}
+        <Container
           date={current}
-          getNow={getNow}
-          length={length}
-          localizer={localizer}
-          getters={getters}
-          components={components}
-          accessors={accessors}
-          showMultiDayTimes={showMultiDayTimes}
-          getDrilldownView={this.getDrilldownView}
+          view={view}
+          views={viewNames}
+          label={label}
+          onView={this.handleViewChange}
           onNavigate={this.handleNavigate}
-          onDrillDown={this.handleDrillDown}
-          onSelectEvent={this.handleSelectEvent}
-          onDoubleClickEvent={this.handleDoubleClickEvent}
-          onSelectSlot={this.handleSelectSlot}
-          onShowMore={this._showMore}
-        />
+          localizer={localizer}
+        >
+          <View
+            ref="view"
+            {...props}
+            events={events}
+            date={current}
+            getNow={getNow}
+            length={length}
+            localizer={localizer}
+            getters={getters}
+            components={components}
+            accessors={accessors}
+            showMultiDayTimes={showMultiDayTimes}
+            getDrilldownView={this.getDrilldownView}
+            onNavigate={this.handleNavigate}
+            onDrillDown={this.handleDrillDown}
+            onSelectEvent={this.handleSelectEvent}
+            onDoubleClickEvent={this.handleDoubleClickEvent}
+            onSelectSlot={this.handleSelectSlot}
+            onShowMore={this._showMore}
+          />
+        </Container>
       </div>
     )
   }
