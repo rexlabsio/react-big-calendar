@@ -152,7 +152,13 @@ export default function withDragAndDrop(Calendar) {
         !!interacting && 'rbc-addons-dnd-is-dragging'
       )
 
-      return <Calendar {...props} components={this.components} />
+      return (
+        <Calendar
+          {...props}
+          interacting={interacting}
+          components={this.components}
+        />
+      )
     }
   }
 
