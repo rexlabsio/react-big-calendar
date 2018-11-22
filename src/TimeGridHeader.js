@@ -54,7 +54,7 @@ class TimeGridHeader extends React.Component {
 
     const today = getNow()
 
-    return range.map(date => {
+    return range.map((date, i) => {
       let drilldownView = getDrilldownView(date)
       let label = localizer.format(date, 'dayFormat')
 
@@ -72,7 +72,7 @@ class TimeGridHeader extends React.Component {
 
       return (
         <div
-          key={`resource_header_cell_${id || idx}`}
+          key={`resource_header_cell_${id || idx || i}`}
           style={style}
           className={cn(
             'rbc-header',
