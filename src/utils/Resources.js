@@ -1,9 +1,7 @@
-export const NONE = {}
-
 export default function Resources(resources, accessors) {
   return {
     map(fn) {
-      if (!resources) return [fn([NONE, null], 0)]
+      if (!resources) return [fn([null, null], 0)]
       return resources.map((resource, idx) =>
         fn([accessors.resourceId(resource), resource], idx)
       )
@@ -12,7 +10,7 @@ export default function Resources(resources, accessors) {
     groupEvents(events) {
       const eventsByResource = new window.Map()
       events.forEach(event => {
-        const id = accessors.resource(event) || NONE
+        const id = accessors.resource(event) || null
         let resourceEvents = eventsByResource.get(id) || []
         resourceEvents.push(event)
         eventsByResource.set(id, resourceEvents)
