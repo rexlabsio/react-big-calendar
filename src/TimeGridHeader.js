@@ -43,12 +43,11 @@ class TimeGridHeader extends React.Component {
     notify(this.props.onDrillDown, [date, view])
   }
 
-  renderHeaderCells(range, resource, idx) {
+  renderHeaderCells(range, resource, id, idx) {
     let {
       localizer,
       getDrilldownView,
       getNow,
-      accessors: { resourceId },
       getters: { dayProp },
       components: { header: HeaderComponent = Header },
     } = this.props
@@ -73,7 +72,7 @@ class TimeGridHeader extends React.Component {
 
       return (
         <div
-          key={`resource_header_${resourceId(resource)}`}
+          key={`resource_header_cell_${id || idx}`}
           style={style}
           className={cn(
             'rbc-header',
@@ -176,7 +175,10 @@ class TimeGridHeader extends React.Component {
         </div>
 
         {resources.map(([id, resource], idx) => (
-          <div className="rbc-time-header-content" key={id || idx}>
+          <div
+            className="rbc-time-header-content"
+            key={`resource_header_content_${id || idx}`}
+          >
             {resource && (
               <div className="rbc-row rbc-row-resource">
                 <div className="rbc-header">
@@ -189,7 +191,7 @@ class TimeGridHeader extends React.Component {
                 range.length <= 1 ? ' rbc-time-header-cell-single-day' : ''
               }`}
             >
-              {this.renderHeaderCells(range, resource, idx)}
+              {this.renderHeaderCells(range, resource, id, idx)}
             </div>
             <DateContentRow
               isAllDay
