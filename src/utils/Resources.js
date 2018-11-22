@@ -1,3 +1,5 @@
+import memoize from 'memoize-one'
+
 export const NONE = {}
 
 export default function Resources(resources, accessors) {
@@ -9,7 +11,7 @@ export default function Resources(resources, accessors) {
       )
     },
 
-    groupEvents(events) {
+    groupEvents: memoize(events => {
       const eventsByResource = new window.Map()
       events.forEach(event => {
         const id = accessors.resource(event) || NONE
@@ -18,6 +20,6 @@ export default function Resources(resources, accessors) {
         eventsByResource.set(id, resourceEvents)
       })
       return eventsByResource
-    },
+    }),
   }
 }

@@ -8,6 +8,8 @@ import DateContentRow from './DateContentRow'
 import Header from './Header'
 import { notify } from './utils/helpers'
 
+const empty = []
+
 class TimeGridHeader extends React.Component {
   static propTypes = {
     range: PropTypes.array.isRequired,
@@ -46,13 +48,14 @@ class TimeGridHeader extends React.Component {
       localizer,
       getDrilldownView,
       getNow,
+      accessors: { resourceId },
       getters: { dayProp },
       components: { header: HeaderComponent = Header },
     } = this.props
 
     const today = getNow()
 
-    return range.map((date, i) => {
+    return range.map(date => {
       let drilldownView = getDrilldownView(date)
       let label = localizer.format(date, 'dayFormat')
 
@@ -70,7 +73,7 @@ class TimeGridHeader extends React.Component {
 
       return (
         <div
-          key={i}
+          key={`resource_header_${resourceId(resource)}`}
           style={style}
           className={cn(
             'rbc-header',
@@ -176,7 +179,7 @@ class TimeGridHeader extends React.Component {
           <div className="rbc-time-header-content" key={id || idx}>
             {resource && (
               <div className="rbc-row rbc-row-resource">
-                <div key={`resource_${idx}`} className="rbc-header">
+                <div className="rbc-header">
                   {accessors.resourceTitle(resource)}
                 </div>
               </div>
@@ -194,7 +197,7 @@ class TimeGridHeader extends React.Component {
               getNow={getNow}
               minRows={2}
               range={range}
-              events={groupedEvents.get(id) || []}
+              events={groupedEvents.get(id) || empty}
               resourceId={resource && id}
               className="rbc-allday-cell"
               selectable={selectable}

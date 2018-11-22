@@ -62,11 +62,13 @@ export default class TimeGrid extends Component {
   constructor(props) {
     super(props)
 
-    this.state = { gutterWidth: undefined, isOverflowing: null }
+    this.state = {
+      gutterWidth: undefined,
+      isOverflowing: null,
+      resources: Resources(props.resources, props.accessors),
+    }
 
     this.scrollRef = React.createRef()
-
-    this.resources = Resources(props.resources, props.accessors)
   }
 
   componentWillMount() {
@@ -85,23 +87,14 @@ export default class TimeGrid extends Component {
     window.addEventListener('resize', this.handleResize)
   }
 
-  handleScroll = e => {
-    if (this.scrollRef.current) {
-      this.scrollRef.current.scrollLeft = e.target.scrollLeft
+  componentDidUpdate(prevProps) {
+    const { resources, accessors } = this.props
+    const { resources: prevResources } = prevProps
+
+    if (resources !== prevResources) {
+      this.setState({ resources: Resources(resources, accessors) })
     }
-  }
 
-  handleResize = () => {
-    raf.cancel(this.rafHandle)
-    this.rafHandle = raf(this.checkOverflow)
-  }
-  componentWillUnmount() {
-    window.removeEventListener('resize', this.handleResize)
-
-    raf.cancel(this.rafHandle)
-  }
-
-  componentDidUpdate() {
     if (this.props.width == null) {
       this.measureGutter()
     }
@@ -119,6 +112,22 @@ export default class TimeGrid extends Component {
     ) {
       this.calculateScroll(nextProps)
     }
+  }
+
+  handleScroll = e => {
+    if (this.scrollRef.current) {
+      this.scrollRef.current.scrollLeft = e.target.scrollLeft
+    }
+  }
+
+  handleResize = () => {
+    raf.cancel(this.rafHandle)
+    this.rafHandle = raf(this.checkOverflow)
+  }
+  componentWillUnmount() {
+    window.removeEventListener('resize', this.handleResize)
+
+    raf.cancel(this.rafHandle)
   }
 
   gutterRef = ref => {
@@ -142,11 +151,12 @@ export default class TimeGrid extends Component {
   }
 
   renderEvents(range, events, now) {
+    const { resources } = this.state
     let { min, max, components, accessors, localizer } = this.props
 
-    const groupedEvents = this.resources.groupEvents(events)
+    const groupedEvents = resources.groupEvents(events)
 
-    return this.resources.map(([id, resource], i) =>
+    return resources.map(([id, resource], i) =>
       range.map((date, jj) => {
         let daysEvents = (groupedEvents.get(id) || []).filter(event =>
           dates.inRange(
@@ -233,7 +243,7 @@ export default class TimeGrid extends Component {
           getNow={getNow}
           localizer={localizer}
           selected={selected}
-          resources={this.resources}
+          resources={this.state.resources}
           selectable={this.props.selectable}
           accessors={accessors}
           getters={getters}
