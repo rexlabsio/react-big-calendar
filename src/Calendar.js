@@ -873,6 +873,7 @@ class Calendar extends React.Component {
         style={style}
       >
         <Container
+          {...props}
           date={current}
           view={view}
           views={viewNames}
