@@ -944,13 +944,16 @@ class Calendar extends React.Component {
     this.handleRangeChange(date, ViewComponent)
   }
 
-  handleViewChange = view => {
-    if (view !== this.props.view && isValidView(view, this.props)) {
-      this.props.onView(view)
+  handleViewChange = newView => {
+    const { date, view, getNow, onView } = this.props
+    const today = getNow()
+
+    if (newView !== view && isValidView(newView, this.props)) {
+      onView(newView)
     }
 
     let views = this.getViews()
-    this.handleRangeChange(this.props.date, views[view], view)
+    this.handleRangeChange(date || today, views[newView], newView)
   }
 
   handleSelectEvent = (...args) => {
