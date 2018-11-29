@@ -190,10 +190,7 @@ class WeekWrapper extends React.Component {
     selector.on('select', point => {
       const bounds = getBoundsForNode(node)
 
-      if (!this.state.segment || !pointInBox(bounds, point)) {
-        this.context.draggable.onEnd(null)
-        return
-      }
+      if (!pointInBox(bounds, point)) return
       this.handleInteractionEnd()
     })
     selector.on('click', () => this.context.draggable.onEnd(null))
@@ -201,16 +198,20 @@ class WeekWrapper extends React.Component {
 
   handleInteractionEnd = () => {
     const { resourceId, isAllDay } = this.props
-    const { event } = this.state.segment
+    const { segment } = this.state
+
+    const event = segment ? segment.event : null
 
     this.reset()
 
-    this.context.draggable.onEnd({
-      start: event.start,
-      end: event.end,
-      resourceId,
-      isAllDay,
-    })
+    this.context.draggable.onEnd(
+      event && {
+        start: event.start,
+        end: event.end,
+        resourceId,
+        isAllDay,
+      }
+    )
   }
 
   _teardownSelectable = () => {
