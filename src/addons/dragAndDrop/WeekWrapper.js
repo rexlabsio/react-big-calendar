@@ -190,7 +190,10 @@ class WeekWrapper extends React.Component {
     selector.on('select', point => {
       const bounds = getBoundsForNode(node)
 
-      if (!this.state.segment || !pointInBox(bounds, point)) return
+      if (!this.state.segment || !pointInBox(bounds, point)) {
+        this.context.draggable.onEnd(null)
+        return
+      }
       this.handleInteractionEnd()
     })
     selector.on('click', () => this.context.draggable.onEnd(null))
