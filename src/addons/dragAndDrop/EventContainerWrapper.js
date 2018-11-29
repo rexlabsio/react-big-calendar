@@ -146,7 +146,7 @@ class EventContainerWrapper extends React.Component {
     selector.on('select', point => {
       const bounds = getBoundsForNode(node)
 
-      if (!pointInColumn(bounds, point)) return
+      if (!this.state.event || !pointInColumn(bounds, point)) return
       this.handleInteractionEnd()
     })
 
@@ -159,13 +159,11 @@ class EventContainerWrapper extends React.Component {
 
     this.reset()
 
-    this.context.draggable.onEnd(
-      event && {
-        start: event.start,
-        end: event.end,
-        resourceId: resource,
-      }
-    )
+    this.context.draggable.onEnd({
+      start: event.start,
+      end: event.end,
+      resourceId: resource,
+    })
   }
 
   _teardownSelectable = () => {
