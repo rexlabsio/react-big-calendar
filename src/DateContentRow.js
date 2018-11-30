@@ -44,11 +44,13 @@ const propTypes = {
 
   minRows: PropTypes.number.isRequired,
   maxRows: PropTypes.number.isRequired,
+  dummyPadding: PropTypes.number,
 }
 
 const defaultProps = {
   minRows: 0,
   maxRows: Infinity,
+  dummyPadding: 0,
 }
 
 class DateContentRow extends React.Component {
@@ -90,9 +92,11 @@ class DateContentRow extends React.Component {
   }
 
   getRowLimit() {
+    const { dummyPadding } = this.props
+
     let eventHeight = getHeight(this.eventRow)
     let headingHeight = this.headingRow ? getHeight(this.headingRow) : 0
-    let eventSpace = getHeight(findDOMNode(this)) - headingHeight
+    let eventSpace = getHeight(findDOMNode(this)) - headingHeight - dummyPadding
 
     return Math.max(Math.floor(eventSpace / eventHeight), 1)
   }

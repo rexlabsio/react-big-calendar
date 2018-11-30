@@ -17,6 +17,7 @@ class TimeGridHeader extends React.Component {
     resources: PropTypes.object,
     getNow: PropTypes.func.isRequired,
     isOverflowing: PropTypes.bool,
+    dummyPadding: PropTypes.number,
 
     rtl: PropTypes.bool,
     width: PropTypes.number,
@@ -105,6 +106,7 @@ class TimeGridHeader extends React.Component {
       localizer,
       accessors,
       components,
+      dummyPadding,
     } = this.props
 
     const resourceId = accessors.resourceId(resource)
@@ -117,6 +119,7 @@ class TimeGridHeader extends React.Component {
         isAllDay
         rtl={rtl}
         getNow={getNow}
+        dummyPadding={dummyPadding}
         minRows={2}
         range={range}
         events={eventsToDisplay}
@@ -151,6 +154,7 @@ class TimeGridHeader extends React.Component {
       scrollRef,
       localizer,
       isOverflowing,
+      dummyPadding,
       components: { timeGutterHeader: TimeGutterHeader },
     } = this.props
 
@@ -197,6 +201,7 @@ class TimeGridHeader extends React.Component {
               isAllDay
               rtl={rtl}
               getNow={getNow}
+              dummyPadding={dummyPadding}
               minRows={2}
               range={range}
               events={groupedEvents.get(id) || empty}
