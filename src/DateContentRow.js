@@ -111,7 +111,12 @@ class DateContentRow extends React.Component {
   }
 
   renderDummy = () => {
-    let { className, range, renderHeader } = this.props
+    let {
+      className,
+      range,
+      components: { eventDummy: EventDummy },
+      renderHeader,
+    } = this.props
     return (
       <div className={className}>
         <div className="rbc-row-content">
@@ -123,7 +128,9 @@ class DateContentRow extends React.Component {
           <div className="rbc-row" ref={this.createEventRef}>
             <div className="rbc-row-segment">
               <div className="rbc-event">
-                <div className="rbc-event-content">&nbsp;</div>
+                <div className="rbc-event-content">
+                  {EventDummy ? <EventDummy /> : ' '}
+                </div>
               </div>
             </div>
           </div>
