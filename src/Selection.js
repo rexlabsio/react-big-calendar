@@ -123,10 +123,8 @@ class Selection {
     let touchMoveListener = null
     let touchEndListener = null
     const handleTouchStart = initialEvent => {
-      timer = setTimeout(() => {
-        cleanup()
-        handler(initialEvent)
-      }, this.longPressThreshold)
+      cleanup()
+      handler(initialEvent)
       touchMoveListener = addEventListener('touchmove', () => cleanup())
       touchEndListener = addEventListener('touchend', () => cleanup())
     }
@@ -318,7 +316,7 @@ class Selection {
 
   _handleMoveEvent(e) {
     if (this._initialEventData === null) {
-      return;
+      return
     }
 
     let { x, y } = this._initialEventData
