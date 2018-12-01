@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types'
-import React from 'react'
+import React, { PureComponent } from 'react'
 import dates from '../../utils/dates'
 import { findDOMNode } from 'react-dom'
 
@@ -17,7 +17,7 @@ const pointInColumn = (bounds, { x, y }) => {
 }
 const propTypes = {}
 
-class EventContainerWrapper extends React.Component {
+class EventContainerWrapper extends PureComponent {
   static propTypes = {
     accessors: PropTypes.object.isRequired,
     components: PropTypes.object.isRequired,
@@ -58,8 +58,8 @@ class EventContainerWrapper extends React.Component {
     const { event: lastEvent } = this.state
     if (
       lastEvent &&
-      startDate === lastEvent.start &&
-      endDate === lastEvent.end
+      startDate.toString() === lastEvent.start.toString() &&
+      endDate.toString() === lastEvent.end.toString()
     ) {
       return
     }
