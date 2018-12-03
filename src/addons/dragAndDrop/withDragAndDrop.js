@@ -124,12 +124,14 @@ export default function withDragAndDrop(Calendar) {
     handleInteractionEnd = interactionInfo => {
       const { action, event } = this.state
 
-      this.setState({
+
+
+      if (this.state.interacting === true) this.setState({
         action: null,
         event: null,
         interacting: false,
         direction: null,
-      })
+      });
 
       if (interactionInfo == null) return
 
