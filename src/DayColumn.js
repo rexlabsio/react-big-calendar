@@ -112,7 +112,11 @@ class DayColumn extends React.Component {
       accessors,
       localizer,
       getters: { dayProp, ...getters },
-      components: { eventContainerWrapper: EventContainer, ...components },
+      components: {
+        eventContainerWrapper: EventContainer,
+        eventSelection: EventSelection,
+        ...components
+      },
     } = this.props
 
     let { slotMetrics } = this
@@ -157,9 +161,11 @@ class DayColumn extends React.Component {
         </EventContainer>
 
         {selecting && (
-          <div className="rbc-slot-selection" style={{ top, height }}>
-            <span>{localizer.format(selectDates, 'selectRangeFormat')}</span>
-          </div>
+          <EventSelection
+            className="rbc-slot-selection"
+            style={{ top, height }}
+            range={localizer.format(selectDates, 'selectRangeFormat')}
+          />
         )}
         {isNow && (
           <div ref="timeIndicator" className="rbc-current-time-indicator" />
@@ -188,7 +194,7 @@ class DayColumn extends React.Component {
       events,
       accessors,
       slotMetrics,
-      minimumStartDifference: Math.ceil(step * timeslots / 2),
+      minimumStartDifference: Math.ceil((step * timeslots) / 2),
     })
 
     return styledEvents.map(({ event, style }, idx) => {
