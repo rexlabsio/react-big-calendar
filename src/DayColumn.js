@@ -54,6 +54,12 @@ class DayColumn extends React.Component {
     timeslots: 2,
   }
 
+  static contextTypes = {
+    draggable: PropTypes.shape({
+      dragAndDropAction: PropTypes.object
+    })
+  }
+
   state = { selecting: false }
 
   constructor(...args) {
@@ -309,6 +315,7 @@ class DayColumn extends React.Component {
     selector.on('selectStart', maybeSelect)
 
     selector.on('beforeSelect', box => {
+      if (this.context.draggable.dragAndDropAction.prevent) return false;
       if (this.props.selectable !== 'ignoreEvents') return
 
       return !isEvent(findDOMNode(this), box)
