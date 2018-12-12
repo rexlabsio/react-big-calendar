@@ -145,7 +145,7 @@ export default function withDragAndDrop(Calendar) {
     }
 
     preventInteraction (prevent) {
-      this.setState({
+      if (this.state.prevent !== prevent) this.setState({
         action: null,
         event: null,
         interacting: false,
