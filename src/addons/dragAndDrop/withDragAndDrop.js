@@ -144,7 +144,7 @@ export default function withDragAndDrop(Calendar) {
       if (action === 'resize') this.props.onEventResize(interactionInfo)
     }
 
-    preventInteraction (prevent) {
+    preventInteraction = prevent => {
       if (this.state.prevent !== prevent) this.setState({
         action: null,
         event: null,
