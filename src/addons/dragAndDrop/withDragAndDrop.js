@@ -83,6 +83,7 @@ export default function withDragAndDrop(Calendar) {
         draggableAccessor: accessor,
         resizableAccessor: accessor,
         dragAndDropAction: PropTypes.object,
+        preventInteraction: PropTypes.func,
       }),
     }
 
@@ -109,22 +110,25 @@ export default function withDragAndDrop(Calendar) {
           draggableAccessor: this.props.draggableAccessor,
           resizableAccessor: this.props.resizableAccessor,
           dragAndDropAction: this.state,
+          preventInteraction: this.preventInteraction,
         },
       }
     }
 
     handleBeginAction = (event, action, direction) => {
+      if (this.state.prevent) return;
       this.setState({ event, action, direction })
     }
 
     handleInteractionStart = () => {
+      if (this.state.prevent) return;
       if (this.state.interacting === false) this.setState({ interacting: true })
     }
 
     handleInteractionEnd = interactionInfo => {
       const { action, event } = this.state
 
-
+      if (this.state.prevent) return;
 
       if (this.state.interacting === true) this.setState({
         action: null,
@@ -138,6 +142,16 @@ export default function withDragAndDrop(Calendar) {
       interactionInfo.event = event
       if (action === 'move') this.props.onEventDrop(interactionInfo)
       if (action === 'resize') this.props.onEventResize(interactionInfo)
+    }
+
+    preventInteraction (prevent) {
+      this.setState({
+        action: null,
+        event: null,
+        interacting: false,
+        direction: null,
+        prevent
+      });
     }
 
     render() {
