@@ -38,11 +38,12 @@ class Agenda extends React.Component {
   render() {
     let { length, date, events, accessors, localizer } = this.props
     let { messages } = localizer
-    let end = dates.add(date, length, 'day')
 
-    let range = dates.range(date, end, 'day')
+    let start = dates.startOf(date, 'month');
+    let end = dates.endOf(date, 'month');
+    let range = dates.range(start, end, 'day')
 
-    events = events.filter(event => inRange(event, date, end, accessors))
+    events = events.filter(event => inRange(event, start, end, accessors))
 
     events.sort((a, b) => +accessors.start(a) - +accessors.start(b))
 
@@ -200,8 +201,9 @@ class Agenda extends React.Component {
   }
 }
 
-Agenda.range = (start, { length = Agenda.defaultProps.length }) => {
-  let end = dates.add(start, length, 'day')
+Agenda.range = (date, { length = Agenda.defaultProps.length }) => {
+  let start = dates.startOf(date, 'month');
+  let end = dates.endOf(date, 'month');
   return { start, end }
 }
 
