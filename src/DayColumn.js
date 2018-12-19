@@ -134,11 +134,11 @@ class DayColumn extends React.Component {
 
     let selectDates = { start: startDate, end: endDate }
 
-    const { dayClassName, dayStyle } = dayProp(max)
-    const { timeIndicatorClassName, timeIndicatorStyle } = timeIndicatorProp(
-      resourceIndex,
-      rangeIndex
-    )
+    const { className: dayClassName, style: dayStyle } = dayProp(max)
+    const {
+      className: timeIndicatorClassName,
+      style: timeIndicatorStyle,
+    } = timeIndicatorProp(resourceIndex, rangeIndex)
 
     return (
       <div
