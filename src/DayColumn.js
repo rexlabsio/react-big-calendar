@@ -47,6 +47,8 @@ class DayColumn extends React.Component {
     className: PropTypes.string,
     dragThroughEvents: PropTypes.bool,
     resource: PropTypes.any,
+    resourceIndex: PropTypes.number,
+    rangeIndex: PropTypes.number,
   }
 
   static defaultProps = {
@@ -56,8 +58,8 @@ class DayColumn extends React.Component {
 
   static contextTypes = {
     draggable: PropTypes.shape({
-      dragAndDropAction: PropTypes.object
-    })
+      dragAndDropAction: PropTypes.object,
+    }),
   }
 
   state = { selecting: false }
@@ -117,7 +119,9 @@ class DayColumn extends React.Component {
       resource,
       accessors,
       localizer,
-      getters: { dayProp, ...getters },
+      resourceIndex,
+      rangeIndex,
+      getters: { dayProp, timeIndicatorProp, ...getters },
       components: {
         eventContainerWrapper: EventContainer,
         eventSelection: EventSelection,
@@ -130,13 +134,17 @@ class DayColumn extends React.Component {
 
     let selectDates = { start: startDate, end: endDate }
 
-    const { className, style } = dayProp(max)
+    const { dayClassName, dayStyle } = dayProp(max)
+    const { timeIndicatorClassName, timeIndicatorStyle } = timeIndicatorProp(
+      resourceIndex,
+      rangeIndex
+    )
 
     return (
       <div
-        style={style}
+        style={dayStyle}
         className={cn(
-          className,
+          dayClassName,
           'rbc-day-slot',
           'rbc-time-column',
           isNow && 'rbc-now',
@@ -174,7 +182,11 @@ class DayColumn extends React.Component {
           />
         )}
         {isNow && (
-          <div ref="timeIndicator" className="rbc-current-time-indicator" />
+          <div
+            ref="timeIndicator"
+            style={timeIndicatorStyle}
+            className={cn('rbc-current-time-indicator', timeIndicatorClassName)}
+          />
         )}
       </div>
     )
@@ -315,7 +327,7 @@ class DayColumn extends React.Component {
     selector.on('selectStart', maybeSelect)
 
     selector.on('beforeSelect', box => {
-      if (this.context.draggable.dragAndDropAction.prevent) return false;
+      if (this.context.draggable.dragAndDropAction.prevent) return false
       if (this.props.selectable !== 'ignoreEvents') return
 
       return !isEvent(findDOMNode(this), box)

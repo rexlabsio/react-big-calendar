@@ -759,6 +759,7 @@ class Calendar extends React.Component {
     eventPropGetter,
     slotPropGetter,
     dayPropGetter,
+    timeIndicatorPropGetter,
     view,
     views,
     localizer,
@@ -778,6 +779,8 @@ class Calendar extends React.Component {
         slotProp: (...args) =>
           (slotPropGetter && slotPropGetter(...args)) || {},
         dayProp: (...args) => (dayPropGetter && dayPropGetter(...args)) || {},
+        timeIndicatorProp: (...args) =>
+          (timeIndicatorPropGetter && timeIndicatorPropGetter(...args)) || {},
       },
       components: defaults(components[view] || {}, omit(components, names), {
         eventWrapper: NoopWrapper,

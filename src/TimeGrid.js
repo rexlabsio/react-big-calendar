@@ -3,6 +3,7 @@ import cn from 'classnames'
 import raf from 'dom-helpers/util/requestAnimationFrame'
 import React, { Component } from 'react'
 import { findDOMNode } from 'react-dom'
+import memoize from 'memoize-one'
 
 import dates from './utils/dates'
 import DayColumn from './DayColumn'
@@ -65,7 +66,6 @@ export default class TimeGrid extends Component {
     this.state = {
       gutterWidth: undefined,
       isOverflowing: null,
-      resources: Resources(props.resources, props.accessors),
     }
 
     this.scrollRef = React.createRef()
@@ -87,14 +87,7 @@ export default class TimeGrid extends Component {
     window.addEventListener('resize', this.handleResize)
   }
 
-  componentDidUpdate(prevProps) {
-    const { resources, accessors } = this.props
-    const { resources: prevResources } = prevProps
-
-    if (resources !== prevResources) {
-      this.setState({ resources: Resources(resources, accessors) })
-    }
-
+  componentDidUpdate() {
     if (this.props.width == null) {
       this.measureGutter()
     }
@@ -124,6 +117,7 @@ export default class TimeGrid extends Component {
     raf.cancel(this.rafHandle)
     this.rafHandle = raf(this.checkOverflow)
   }
+
   componentWillUnmount() {
     window.removeEventListener('resize', this.handleResize)
 
@@ -150,13 +144,17 @@ export default class TimeGrid extends Component {
     })
   }
 
+  getResources = memoize((resources, accessors) =>
+    Resources(resources, accessors)
+  )
+
   renderEvents(range, events, now) {
-    const { resources } = this.state
-    let { min, max, components, accessors, localizer } = this.props
+    let { min, max, components, resources, accessors, localizer } = this.props
 
-    const groupedEvents = resources.groupEvents(events)
+    const computedResources = this.getResources(resources, accessors)
+    const groupedEvents = computedResources.groupEvents(events)
 
-    return resources.map(([id, resource], i) =>
+    return computedResources.map(([id, resource], i) =>
       range.map((date, jj) => {
         let daysEvents = (groupedEvents.get(id) || []).filter(event =>
           dates.inRange(
@@ -179,6 +177,8 @@ export default class TimeGrid extends Component {
             key={i + '-' + jj}
             date={date}
             events={daysEvents}
+            resourceIndex={i}
+            rangeIndex={jj}
           />
         )
       })
@@ -214,6 +214,8 @@ export default class TimeGrid extends Component {
     let allDayEvents = [],
       rangeEvents = []
 
+    const computedResources = this.getResources(resources, accessors)
+
     events.forEach(event => {
       if (inRange(event, start, end, accessors)) {
         let eStart = accessors.start(event),
@@ -235,7 +237,10 @@ export default class TimeGrid extends Component {
 
     return (
       <div
-        className={cn('rbc-time-view', resources && 'rbc-time-view-resources')}
+        className={cn(
+          'rbc-time-view',
+          computedResources && 'rbc-time-view-resources'
+        )}
       >
         <TimeGridHeader
           range={range}
@@ -245,7 +250,7 @@ export default class TimeGrid extends Component {
           dummyPadding={dummyPadding}
           localizer={localizer}
           selected={selected}
-          resources={this.state.resources}
+          resources={computedResources}
           selectable={this.props.selectable}
           accessors={accessors}
           getters={getters}
