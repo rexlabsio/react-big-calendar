@@ -18,6 +18,7 @@ class TimeGridHeader extends React.Component {
     getNow: PropTypes.func.isRequired,
     isOverflowing: PropTypes.bool,
     dummyPadding: PropTypes.number,
+    setScrollbarMargin: PropTypes.bool,
 
     rtl: PropTypes.bool,
     width: PropTypes.number,
@@ -37,6 +38,11 @@ class TimeGridHeader extends React.Component {
     onDrillDown: PropTypes.func,
     getDrilldownView: PropTypes.func.isRequired,
     scrollRef: PropTypes.any,
+    rowContentRef: PropTypes.any,
+  }
+
+  static defaultProps = {
+    setScrollbarMargin: true,
   }
 
   handleHeaderClick = (date, view, e) => {
@@ -107,6 +113,7 @@ class TimeGridHeader extends React.Component {
       accessors,
       components,
       dummyPadding,
+      rowContentRef,
     } = this.props
 
     const resourceId = accessors.resourceId(resource)
@@ -120,6 +127,7 @@ class TimeGridHeader extends React.Component {
         rtl={rtl}
         getNow={getNow}
         dummyPadding={dummyPadding}
+        rowContentRef={rowContentRef}
         minRows={2}
         range={range}
         events={eventsToDisplay}
@@ -155,12 +163,16 @@ class TimeGridHeader extends React.Component {
       localizer,
       isOverflowing,
       dummyPadding,
+      setScrollbarMargin,
+      rowContentRef,
       components: { timeGutterHeader: TimeGutterHeader },
     } = this.props
 
     let style = {}
     if (isOverflowing) {
-      style[rtl ? 'marginLeft' : 'marginRight'] = `${scrollbarSize()}px`
+      style[rtl ? 'marginLeft' : 'marginRight'] = setScrollbarMargin
+        ? `${scrollbarSize()}px`
+        : '0px'
     }
 
     const groupedEvents = resources.groupEvents(events)
@@ -202,6 +214,7 @@ class TimeGridHeader extends React.Component {
               rtl={rtl}
               getNow={getNow}
               dummyPadding={dummyPadding}
+              rowContentRef={rowContentRef}
               minRows={2}
               range={range}
               events={groupedEvents.get(id) || empty}

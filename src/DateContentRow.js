@@ -45,6 +45,8 @@ const propTypes = {
   minRows: PropTypes.number.isRequired,
   maxRows: PropTypes.number.isRequired,
   dummyPadding: PropTypes.number,
+
+  rowContentRef: PropTypes.func,
 }
 
 const defaultProps = {
@@ -167,6 +169,8 @@ class DateContentRow extends React.Component {
       resourceId,
       longPressThreshold,
       isAllDay,
+
+      rowContentRef,
     } = this.props
 
     if (renderForMeasure) return this.renderDummy()
@@ -205,7 +209,7 @@ class DateContentRow extends React.Component {
           longPressThreshold={longPressThreshold}
         />
 
-        <div className="rbc-row-content">
+        <div className="rbc-row-content" ref={rowContentRef}>
           {renderHeader && (
             <div className="rbc-row " ref={this.createHeadingRef}>
               {range.map(this.renderHeadingCell)}

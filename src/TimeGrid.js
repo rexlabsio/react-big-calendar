@@ -202,6 +202,8 @@ export default class TimeGrid extends Component {
       showMultiDayTimes,
       longPressThreshold,
       dummyPadding,
+      setScrollbarMargin,
+      rowContentRef,
     } = this.props
 
     width = width || this.state.gutterWidth
@@ -248,6 +250,8 @@ export default class TimeGrid extends Component {
           width={width}
           getNow={getNow}
           dummyPadding={dummyPadding}
+          setScrollbarMargin={setScrollbarMargin}
+          rowContentRef={rowContentRef}
           localizer={localizer}
           selected={selected}
           resources={computedResources}

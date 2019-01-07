@@ -147,6 +147,7 @@ class MonthView extends React.Component {
       accessors,
       getters,
       dummyPadding,
+      rowContentRef,
     } = this.props
 
     const { needLimitMeasure, rowLimit } = this.state
@@ -159,6 +160,7 @@ class MonthView extends React.Component {
       <DateContentRow
         key={weekIdx}
         ref={weekIdx === 0 ? 'slotRow' : undefined}
+        rowContentRef={rowContentRef}
         dummyPadding={dummyPadding}
         container={this.getContainer}
         className="rbc-month-row"
