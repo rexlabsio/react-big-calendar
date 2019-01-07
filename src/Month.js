@@ -147,6 +147,8 @@ class MonthView extends React.Component {
       accessors,
       getters,
       dummyPadding,
+      isOverflowing,
+      setScrollbarMargin,
       rowContentRef,
     } = this.props
 
@@ -161,6 +163,8 @@ class MonthView extends React.Component {
         key={weekIdx}
         ref={weekIdx === 0 ? 'slotRow' : undefined}
         rowContentRef={rowContentRef}
+        isOverflowing={isOverflowing}
+        setScrollbarMargin={setScrollbarMargin}
         dummyPadding={dummyPadding}
         container={this.getContainer}
         className="rbc-month-row"

@@ -2,6 +2,7 @@ import PropTypes from 'prop-types'
 import React from 'react'
 import { findDOMNode } from 'react-dom'
 import cn from 'classnames'
+import scrollbarSize from 'dom-helpers/util/scrollbarSize'
 
 import dates from './utils/dates'
 import { notify } from './utils/helpers'
@@ -28,6 +29,9 @@ class BackgroundCells extends React.Component {
     range: PropTypes.arrayOf(PropTypes.instanceOf(Date)),
     rtl: PropTypes.bool,
     type: PropTypes.string,
+
+    setScrollbarMargin: PropTypes.bool,
+    isOverflowing: PropTypes.bool,
   }
 
   constructor(props, context) {
@@ -55,17 +59,27 @@ class BackgroundCells extends React.Component {
 
   render() {
     let {
+      rtl,
       range,
       getNow,
       getters,
       date: currentDate,
+      isOverflowing,
+      setScrollbarMargin,
       components: { dateCellWrapper: Wrapper },
     } = this.props
     let { selecting, startIdx, endIdx } = this.state
     let current = getNow()
 
+    let style = {}
+    if (isOverflowing) {
+      style[rtl ? 'marginLeft' : 'marginRight'] = !setScrollbarMargin
+        ? `${scrollbarSize()}px`
+        : '0px'
+    }
+
     return (
-      <div className="rbc-row-bg">
+      <div style={style} className="rbc-row-bg">
         {range.map((date, index) => {
           let selected = selecting && index >= startIdx && index <= endIdx
           const { className, style } = getters.dayProp(date)

@@ -170,6 +170,8 @@ class DateContentRow extends React.Component {
       longPressThreshold,
       isAllDay,
 
+      isOverflowing,
+      setScrollbarMargin,
       rowContentRef,
     } = this.props
 
@@ -195,6 +197,8 @@ class DateContentRow extends React.Component {
     return (
       <div className={className}>
         <BackgroundCells
+          isOverflowing={isOverflowing}
+          setScrollbarMargin={setScrollbarMargin}
           date={date}
           getNow={getNow}
           rtl={rtl}

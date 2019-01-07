@@ -114,6 +114,8 @@ class TimeGridHeader extends React.Component {
       components,
       dummyPadding,
       rowContentRef,
+      isOverflowing,
+      setScrollbarMargin,
     } = this.props
 
     const resourceId = accessors.resourceId(resource)
@@ -127,6 +129,8 @@ class TimeGridHeader extends React.Component {
         rtl={rtl}
         getNow={getNow}
         dummyPadding={dummyPadding}
+        isOverflowing={isOverflowing}
+        setScrollbarMargin={setScrollbarMargin}
         rowContentRef={rowContentRef}
         minRows={2}
         range={range}
@@ -169,8 +173,12 @@ class TimeGridHeader extends React.Component {
     } = this.props
 
     let style = {}
+    let headerStyle = {}
     if (isOverflowing) {
       style[rtl ? 'marginLeft' : 'marginRight'] = setScrollbarMargin
+        ? `${scrollbarSize()}px`
+        : '0px'
+      headerStyle[rtl ? 'marginLeft' : 'marginRight'] = !setScrollbarMargin
         ? `${scrollbarSize()}px`
         : '0px'
     }
@@ -203,6 +211,7 @@ class TimeGridHeader extends React.Component {
               </div>
             )}
             <div
+              style={headerStyle}
               className={`rbc-row rbc-time-header-cell${
                 range.length <= 1 ? ' rbc-time-header-cell-single-day' : ''
               }`}
@@ -215,6 +224,8 @@ class TimeGridHeader extends React.Component {
               getNow={getNow}
               dummyPadding={dummyPadding}
               rowContentRef={rowContentRef}
+              isOverflowing={isOverflowing}
+              setScrollbarMargin={setScrollbarMargin}
               minRows={2}
               range={range}
               events={groupedEvents.get(id) || empty}
