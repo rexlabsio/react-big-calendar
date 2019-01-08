@@ -89,12 +89,10 @@ class Event {
 /**
  * Return true if event a and b is considered to be on the same row.
  */
-function onSameRow(a, b, minimumStartDifference) {
+function onSameRow(a, b) {
   return (
-    // Occupies the same start slot.
-    Math.abs(b.start - a.start) < minimumStartDifference ||
     // A's start slot overlaps with b's end slot.
-    (b.start > a.start && b.start < a.end)
+    b.start > a.start && b.start < a.end
   )
 }
 
@@ -128,12 +126,7 @@ function sortByRender(events) {
   return sorted
 }
 
-function getStyledEvents({
-  events,
-  minimumStartDifference,
-  slotMetrics,
-  accessors,
-}) {
+function getStyledEvents({ events, slotMetrics, accessors }) {
   // Create proxy events and order them so that we don't have
   // to fiddle with z-indexes.
   const proxies = events.map(
@@ -150,9 +143,7 @@ function getStyledEvents({
 
     // Check if this event can go into a container event.
     const container = containerEvents.find(
-      c =>
-        c.end > event.start ||
-        Math.abs(event.start - c.start) < minimumStartDifference
+      c => c.end > event.start || Math.abs(event.start - c.start) <= 0
     )
 
     // Couldn't find a container — that means this event is a container.
@@ -169,7 +160,7 @@ function getStyledEvents({
     // Start looking from behind.
     let row = null
     for (let j = container.rows.length - 1; !row && j >= 0; j--) {
-      if (onSameRow(container.rows[j], event, minimumStartDifference)) {
+      if (onSameRow(container.rows[j], event)) {
         row = container.rows[j]
       }
     }
