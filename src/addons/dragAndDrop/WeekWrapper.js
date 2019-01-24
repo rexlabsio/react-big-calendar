@@ -83,6 +83,7 @@ class WeekWrapper extends React.Component {
     const { accessors } = this.props
 
     if (!event) return
+    if (!event.allDay) return;
 
     let rowBox = getBoundsForNode(node)
 
@@ -201,6 +202,7 @@ class WeekWrapper extends React.Component {
     const { event } = this.state.segment
 
     this.reset()
+    if (!event.allDay) return;
 
     this.context.draggable.onEnd({
       start: event.start,
