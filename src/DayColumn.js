@@ -79,6 +79,16 @@ class DayColumn extends React.Component {
     }
   }
 
+  componentDidUpdate(prevProps) {
+    // https://github.com/intljusticemission/react-big-calendar/pull/1054
+    if (!dates.eq(prevProps.date, this.props.date, 'minutes')) {
+      if (this.props.isNow) {
+        this.positionTimeIndicator()
+        this.triggerTimeIndicatorUpdate()
+      }
+    }
+  }
+
   componentWillUnmount() {
     this._teardownSelectable()
     window.clearTimeout(this._timeIndicatorTimeout)
