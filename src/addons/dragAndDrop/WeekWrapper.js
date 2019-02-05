@@ -80,10 +80,10 @@ class WeekWrapper extends React.Component {
   handleMove = ({ x, y }, node) => {
     const { event } = this.context.draggable.dragAndDropAction
     const metrics = this.props.slotMetrics
-    const { accessors } = this.props
+    const { accessors, isAllDay } = this.props
 
     if (!event) return
-    if (!event.allDay) return;
+    if (isAllDay && !event.allDay) return
 
     let rowBox = getBoundsForNode(node)
 
@@ -202,7 +202,7 @@ class WeekWrapper extends React.Component {
     const { event } = this.state.segment
 
     this.reset()
-    if (!event.allDay) return;
+    if (isAllDay && !event.allDay) return
 
     this.context.draggable.onEnd({
       start: event.start,
