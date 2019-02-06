@@ -109,7 +109,7 @@ class WeekWrapper extends React.Component {
 
   handleResize(point, node) {
     const { event, direction } = this.context.draggable.dragAndDropAction
-    const { accessors, slotMetrics: metrics } = this.props
+    const { accessors, slotMetrics: metrics, splitWeekView } = this.props
 
     let { start, end } = eventTimes(event, accessors)
 
@@ -128,7 +128,7 @@ class WeekWrapper extends React.Component {
           'day'
         )
       } else if (
-        dates.inRange(start, metrics.first, metrics.last) ||
+        (!splitWeekView && dates.inRange(start, metrics.first, metrics.last)) ||
         (rowBox.bottom < point.y && +metrics.first > +start)
       ) {
         end = dates.add(metrics.last, 1, 'milliseconds')
@@ -147,7 +147,7 @@ class WeekWrapper extends React.Component {
           getSlotAtX(rowBox, point.x, false, metrics.slots)
         )
       } else if (
-        dates.inRange(end, metrics.first, metrics.last) ||
+        (!splitWeekView && dates.inRange(end, metrics.first, metrics.last)) ||
         (rowBox.top > point.y && +metrics.last < +end)
       ) {
         start = dates.add(metrics.first, -1, 'milliseconds')

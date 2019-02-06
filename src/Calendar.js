@@ -743,6 +743,7 @@ class Calendar extends React.Component {
       context: this.getContext(this.props),
     }
   }
+
   componentWillReceiveProps(nextProps) {
     this.setState({ context: this.getContext(nextProps) })
   }

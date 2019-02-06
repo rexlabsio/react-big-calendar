@@ -20,6 +20,7 @@ const propTypes = {
   resourceId: PropTypes.any,
   renderForMeasure: PropTypes.bool,
   renderHeader: PropTypes.func,
+  splitWeekView: PropTypes.bool,
 
   container: PropTypes.func,
   selected: PropTypes.object,
@@ -53,6 +54,7 @@ const defaultProps = {
   minRows: 0,
   maxRows: Infinity,
   dummyPadding: 0,
+  splitWeekView: false,
 }
 
 class DateContentRow extends React.Component {
@@ -154,6 +156,7 @@ class DateContentRow extends React.Component {
       selected,
       selectable,
       renderForMeasure,
+      splitWeekView,
 
       accessors,
       getters,
@@ -191,6 +194,7 @@ class DateContentRow extends React.Component {
       onSelect,
       onDoubleClick,
       resourceId,
+      splitWeekView,
       slotMetrics: metrics,
     }
 
