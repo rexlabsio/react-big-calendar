@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types'
 import invariant from 'invariant'
+import memoize from 'memoize-one'
 
 const localePropType = PropTypes.oneOfType([PropTypes.string, PropTypes.func])
 
@@ -36,6 +37,13 @@ export class DateLocalizer {
   }
 }
 
+const startOfWeek = memoize((localizer, culture) => () =>
+  localizer.startOfWeek(culture)
+)
+const format = memoize((localizer, culture, formats) => (value, format) =>
+  localizer.format(value, formats[format] || format, culture)
+)
+
 export function mergeWithDefaults(
   localizer,
   culture,
@@ -50,8 +58,7 @@ export function mergeWithDefaults(
   return {
     ...localizer,
     messages,
-    startOfWeek: () => localizer.startOfWeek(culture),
-    format: (value, format) =>
-      localizer.format(value, formats[format] || format, culture),
+    startOfWeek: startOfWeek(localizer, culture),
+    format: format(localizer, culture, formats),
   }
 }
