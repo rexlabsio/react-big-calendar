@@ -43,6 +43,10 @@ const startOfWeek = memoize((localizer, culture) => () =>
 const format = memoize((localizer, culture, formats) => (value, format) =>
   localizer.format(value, formats[format] || format, culture)
 )
+const getFormats = memoize((formats, formatOverrides) => ({
+  ...formats,
+  ...formatOverrides,
+}))
 
 export function mergeWithDefaults(
   localizer,
@@ -50,15 +54,14 @@ export function mergeWithDefaults(
   formatOverrides,
   messages
 ) {
-  const formats = {
-    ...localizer.formats,
-    ...formatOverrides,
-  }
-
   return {
     ...localizer,
     messages,
     startOfWeek: startOfWeek(localizer, culture),
-    format: format(localizer, culture, formats),
+    format: format(
+      localizer,
+      culture,
+      getFormats(localizer.formats, formatOverrides)
+    ),
   }
 }
