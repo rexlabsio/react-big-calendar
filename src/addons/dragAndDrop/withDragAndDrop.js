@@ -116,26 +116,36 @@ export default function withDragAndDrop(Calendar) {
     }
 
     handleBeginAction = (event, action, direction) => {
-      if (this.state.prevent) return;
-      this.setState({ event, action, direction })
+      const { onEventBeginAction } = this.props
+
+      if (this.state.prevent) return
+
+      this.setState({
+        action,
+        direction,
+        event: (onEventBeginAction && onEventBeginAction(event)) || event,
+      })
     }
 
     handleInteractionStart = () => {
-      if (this.state.prevent) return;
+      if (this.state.prevent) return
+      if (this.props.onEventInteractionStart)
+        this.props.onEventInteractionStart()
       if (this.state.interacting === false) this.setState({ interacting: true })
     }
 
     handleInteractionEnd = interactionInfo => {
       const { action, event } = this.state
 
-      if (this.state.prevent) return;
+      if (this.state.prevent) return
 
-      if (this.state.interacting === true) this.setState({
-        action: null,
-        event: null,
-        interacting: false,
-        direction: null,
-      });
+      if (this.state.interacting === true)
+        this.setState({
+          action: null,
+          event: null,
+          interacting: false,
+          direction: null,
+        })
 
       if (interactionInfo == null) return
 
@@ -145,18 +155,19 @@ export default function withDragAndDrop(Calendar) {
     }
 
     preventInteraction = prevent => {
-      if (this.state.prevent !== prevent) this.setState({
-        action: null,
-        event: null,
-        interacting: false,
-        direction: null,
-        prevent
-      });
+      if (this.state.prevent !== prevent)
+        this.setState({
+          action: null,
+          event: null,
+          interacting: false,
+          direction: null,
+          prevent,
+        })
     }
 
     render() {
       const { selectable, ...props } = this.props
-      const { interacting } = this.state
+      const { event, interacting } = this.state
       delete props.onEventDrop
       delete props.onEventResize
 
@@ -172,6 +183,7 @@ export default function withDragAndDrop(Calendar) {
         <Calendar
           {...props}
           interacting={interacting}
+          interactedEvent={event}
           components={this.components}
         />
       )

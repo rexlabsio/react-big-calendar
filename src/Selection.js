@@ -17,7 +17,13 @@ function isOverContainer(container, x, y) {
 
 export function getEventNodeFromPoint(node, { clientX, clientY }) {
   let target = document.elementFromPoint(clientX, clientY)
-  return closest(target, '.rbc-event', node)
+  // Target custom event node in the case where you
+  // have extra meta information within an event (i.e. travel time)
+  // and don't want it to be factored into the calculation
+  return (
+    closest(target, '[data-mainevent]', node) ||
+    closest(target, '.rbc-event', node)
+  )
 }
 
 export function isEvent(node, bounds) {
