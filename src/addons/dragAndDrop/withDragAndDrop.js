@@ -130,7 +130,7 @@ export default function withDragAndDrop(Calendar) {
     handleInteractionStart = () => {
       if (this.state.prevent) return
       if (this.props.onEventInteractionStart)
-        this.props.onEventInteractionStart()
+        this.props.onEventInteractionStart(this.state.event)
       if (this.state.interacting === false) this.setState({ interacting: true })
     }
 
