@@ -921,7 +921,8 @@ class Calendar extends React.Component {
    * state via url
    */
   handleRangeChange = (date, viewComponent, view) => {
-    let { onRangeChange, localizer } = this.props
+    let { onRangeChange } = this.props
+    let { localizer } = this.state.context
 
     if (onRangeChange) {
       if (viewComponent.range) {
