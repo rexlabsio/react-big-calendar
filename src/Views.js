@@ -4,6 +4,7 @@ import Day from './Day'
 import Week from './Week'
 import WorkWeek from './WorkWeek'
 import SplitWeek from './SplitWeek'
+import SplitWorkWeek from './SplitWorkWeek'
 import Agenda from './Agenda'
 
 const VIEWS = {
@@ -11,6 +12,7 @@ const VIEWS = {
   [views.WEEK]: Week,
   [views.WORK_WEEK]: WorkWeek,
   [views.SPLIT_WEEK]: SplitWeek,
+  [views.SPLIT_WORK_WEEK]: SplitWorkWeek,
   [views.DAY]: Day,
   [views.AGENDA]: Agenda,
 }
